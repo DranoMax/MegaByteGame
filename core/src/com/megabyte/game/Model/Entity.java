@@ -1,5 +1,7 @@
 package com.megabyte.game.Model;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -26,7 +28,23 @@ public abstract class Entity {
         this.SIZE = SIZE;
         this.setPosition(position);
         this.setBounds(new Rectangle(position.x, position.y, SIZE, SIZE));
+        loadTextures();
     }
+
+    /**
+     * Used for loading textures specific to extending Entity
+     */
+    public abstract void loadTextures();
+
+    /**
+     * Called by WorldRenderer in order to actually draw the Entity
+     *
+     * @param spriteBatch
+     * @param PLAYER_POSITION_IN_SCREEN
+     * @param ppuX
+     * @param ppuY
+     */
+    public abstract void drawEntity(SpriteBatch spriteBatch, OrthographicCamera cam, float PLAYER_POSITION_IN_SCREEN, float ppuX, float ppuY);
 
     public void setAcceleration(Vector2 acceleration) {
         this.acceleration = acceleration;

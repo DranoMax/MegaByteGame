@@ -5,6 +5,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.megabyte.game.util.MapReader;
 
+import java.util.ArrayList;
+
 public class Level {
 
     private int width;
@@ -12,7 +14,15 @@ public class Level {
     private Block[][] blocks;
     private MapReader mapReader = new MapReader();
     private char map[][];
-    Music music;
+    private Music music;
+
+    private PlayerCharacter playerCharacter;
+
+    ArrayList<Entity> enemies = new ArrayList<Entity>();
+
+    public ArrayList<Entity> getEnemies() {
+        return enemies;
+    }
 
     public int getWidth() {
         return width;
@@ -46,6 +56,10 @@ public class Level {
         return blocks[x][y];
     }
 
+    public PlayerCharacter getPlayerCharacter() {
+        return playerCharacter;
+    }
+
     private void loadDemoLevel() {
         music = Gdx.audio.newMusic(Gdx.files.internal("sounds/Necrophageon.wav"));
         mapReader.readMap();
@@ -58,6 +72,10 @@ public class Level {
             for (int x = 0; x < height; x++) {
                 if (map[x][i] == 'x') {
                     blocks[i][height-1-x] = new Block(new Vector2(i, height-1-x));
+                } else if (map[x][i] == 's') {
+                    playerCharacter = new PlayerCharacter(new Vector2(i, height-1-x));
+                } else if (map[x][i] == 'm') {
+                    enemies.add(new Mom(new Vector2(i, height-1-x)));
                 }
             }
         }
