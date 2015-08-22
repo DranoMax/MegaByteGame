@@ -32,7 +32,6 @@ public class World {
     public List<Block> getDrawableBlocks(int width, int height) {
         int x = (int)bob.getPosition().x - width;
         int y = (int)bob.getPosition().y - height;
-        System.out.println(x + " " + y);
         if (x < 0) {
             x = 0;
         }
