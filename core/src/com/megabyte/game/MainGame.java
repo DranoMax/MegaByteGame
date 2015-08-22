@@ -7,12 +7,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.megabyte.game.Entities.Mom;
 import com.megabyte.game.Entities.PlayerCharacter;
 
 public class MainGame extends ApplicationAdapter {
 	private OrthographicCamera camera;
 	SpriteBatch batch;
 	PlayerCharacter playerCharacter;
+	Mom mom;
 
 	// Sets up our camera and sets the window to a specific width
 	private void setupCamera() {
@@ -24,6 +26,7 @@ public class MainGame extends ApplicationAdapter {
 	private void setupEntities() {
 		batch = new SpriteBatch();
 		playerCharacter = new PlayerCharacter(new Sprite(new Texture("badlogic.jpg")));
+		mom = new Mom();
 	}
 	
 	@Override
@@ -36,11 +39,12 @@ public class MainGame extends ApplicationAdapter {
 	public void render () {
 		// Listen for keyboard events so that we move our PC around
 		playerCharacter.update(Gdx.graphics.getDeltaTime());
-
+		mom.update(Gdx.graphics.getDeltaTime());
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		playerCharacter.getSprite().draw(batch);
+		mom.getSprite().draw(batch);
 		batch.end();
 	}
 }
