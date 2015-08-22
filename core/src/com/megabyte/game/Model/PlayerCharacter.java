@@ -18,11 +18,11 @@ public class PlayerCharacter extends Entity{
     private State state = State.IDLE;
     boolean	facingLeft = true;
     private static final long LONG_JUMP_PRESS 	= 150l;
-    private static final float ACCELERATION 	= 20f;
+    private static final float ACCELERATION 	= 30f;
     private static final float GRAVITY 			= -20f;
     private static final float MAX_JUMP_SPEED	= 7f;
     private static final float DAMP 			= 0.90f;
-    private static final float MAX_VEL 			= 4f;
+    private static final float MAX_VEL 			= 10f;
 
     // these are temporary
     private static final float WIDTH = 10f;
@@ -50,14 +50,17 @@ public class PlayerCharacter extends Entity{
             this.getVelocity().x = -MAX_VEL;
         }
 
+        // Get Keyboard updates
         this.updatePosition();
+
+        // Don't fall through the floor!
         if (this.getPosition().y < 0) {
-            this.getPosition().y = 0f;
-            this.setPosition(this.getPosition());
+            this.setY(0f);
             if (this.getState().equals(State.JUMPING)) {
                 this.setState(State.IDLE);
             }
         }
+        // Don't run through the left wall!
         if (this.getPosition().x < 0) {
             this.getPosition().x = 0;
             this.setPosition(this.getPosition());
@@ -65,6 +68,7 @@ public class PlayerCharacter extends Entity{
                 this.setState(State.IDLE);
             }
         }
+        // Don't run through the right wall!
         if (this.getPosition().x > WIDTH ) {
             this.getPosition().x = WIDTH ;
             this.setPosition(this.getPosition());
