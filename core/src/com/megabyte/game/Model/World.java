@@ -10,8 +10,8 @@ import java.util.List;
 public class World {
 
     /** Our player controlled hero **/
-    PlayerCharacter bob;
-    /** A world has a level through which Bob needs to go through **/
+    PlayerCharacter playerCharacter;
+    /** A world has a level through which playerCharacter needs to go through **/
     Level level;
 
     /** The collision boxes **/
@@ -22,16 +22,16 @@ public class World {
     public Array<Rectangle> getCollisionRects() {
         return collisionRects;
     }
-    public PlayerCharacter getBob() {
-        return bob;
+    public PlayerCharacter getPlayerCharacter() {
+        return playerCharacter;
     }
     public Level getLevel() {
         return level;
     }
     /** Return only the blocks that need to be drawn **/
     public List<Block> getDrawableBlocks(int width, int height) {
-        int x = (int)bob.getPosition().x - width;
-        int y = (int)bob.getPosition().y - height;
+        int x = (int)playerCharacter.getPosition().x - width;
+        int y = (int)playerCharacter.getPosition().y - height;
         if (x < 0) {
             x = 0;
         }
@@ -66,7 +66,7 @@ public class World {
     }
 
     private void createDemoWorld() {
-        bob = new PlayerCharacter(new Vector2(7, 2));
+        playerCharacter = new PlayerCharacter(new Vector2(7, 2));
         level = new Level();
     }
 }

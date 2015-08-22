@@ -24,7 +24,7 @@ public class PlayerCharacterController {
     private static final float MAX_VEL 			= 4f;
 
     private World world;
-    private PlayerCharacter bob;
+    private PlayerCharacter playerCharacter;
     private long	jumpPressedTime;
     private boolean jumpingPressed;
     private boolean grounded = false;
@@ -46,12 +46,12 @@ public class PlayerCharacterController {
         keys.put(Keys.FIRE, false);
     };
 
-    // Blocks that Bob can collide with any given frame
+    // Blocks that playerCharacter can collide with any given frame
     private Array<Block> collidable = new Array<Block>();
 
     public PlayerCharacterController(World world) {
         this.world = world;
-        this.bob = world.getBob();
+        this.playerCharacter = world.getPlayerCharacter();
     }
 
     // ** Key presses and touches **************** //
@@ -91,120 +91,120 @@ public class PlayerCharacterController {
 
     /** The main update method **/
     public void update(float delta) {
-        // Processing the input - setting the states of Bob
+        // Processing the input - setting the states of playerCharacter
         processInput();
 
-        // If Bob is grounded then reset the state to IDLE
-        if (grounded && bob.getState().equals(PlayerCharacter.State.JUMPING)) {
-            bob.setState(PlayerCharacter.State.IDLE);
+        // If playerCharacter is grounded then reset the state to IDLE
+        if (grounded && playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+            playerCharacter.setState(PlayerCharacter.State.IDLE);
         }
 
         // Setting initial vertical acceleration
-        bob.getAcceleration().y = GRAVITY;
+        playerCharacter.getAcceleration().y = GRAVITY;
 
         // Convert acceleration to frame time
-        bob.getAcceleration().scl(delta);
+        playerCharacter.getAcceleration().scl(delta);
 
         // apply acceleration to change velocity
-        bob.getVelocity().add(bob.getAcceleration().x, bob.getAcceleration().y);
+        playerCharacter.getVelocity().add(playerCharacter.getAcceleration().x, playerCharacter.getAcceleration().y);
 
-        // checking collisions with the surrounding blocks depending on Bob's velocity
+        // checking collisions with the surrounding blocks depending on playerCharacter's velocity
         checkCollisionWithBlocks(delta);
 
-        // apply damping to halt Bob nicely
-        bob.getVelocity().x *= DAMP;
+        // apply damping to halt playerCharacter nicely
+        playerCharacter.getVelocity().x *= DAMP;
 
         // ensure terminal velocity is not exceeded
-        if (bob.getVelocity().x > MAX_VEL) {
-            bob.getVelocity().x = MAX_VEL;
+        if (playerCharacter.getVelocity().x > MAX_VEL) {
+            playerCharacter.getVelocity().x = MAX_VEL;
         }
-        if (bob.getVelocity().x < -MAX_VEL) {
-            bob.getVelocity().x = -MAX_VEL;
+        if (playerCharacter.getVelocity().x < -MAX_VEL) {
+            playerCharacter.getVelocity().x = -MAX_VEL;
         }
 
         // simply updates the state time
-        bob.update(delta);
+        playerCharacter.update(delta);
 
     }
 
     /** Collision checking **/
     private void checkCollisionWithBlocks(float delta) {
         // scale velocity to frame units
-        bob.getVelocity().scl(delta);
+        playerCharacter.getVelocity().scl(delta);
 
         // Obtain the rectangle from the pool instead of instantiating it
-        Rectangle bobRect = rectPool.obtain();
-        // set the rectangle to bob's bounding box
-        bobRect.set(bob.getBounds().x, bob.getBounds().y, bob.getBounds().width, bob.getBounds().height);
+        Rectangle playerCharacterRect = rectPool.obtain();
+        // set the rectangle to playerCharacter's bounding box
+        playerCharacterRect.set(playerCharacter.getBounds().x, playerCharacter.getBounds().y, playerCharacter.getBounds().width, playerCharacter.getBounds().height);
 
         // we first check the movement on the horizontal X axis
         int startX, endX;
-        int startY = (int) bob.getBounds().y;
-        int endY = (int) (bob.getBounds().y + bob.getBounds().height);
-        // if Bob is heading left then we check if he collides with the block on his left
+        int startY = (int) playerCharacter.getBounds().y;
+        int endY = (int) (playerCharacter.getBounds().y + playerCharacter.getBounds().height);
+        // if playerCharacter is heading left then we check if he collides with the block on his left
         // we check the block on his right otherwise
-        if (bob.getVelocity().x < 0) {
-            startX = endX = (int) Math.floor(bob.getBounds().x + bob.getVelocity().x);
+        if (playerCharacter.getVelocity().x < 0) {
+            startX = endX = (int) Math.floor(playerCharacter.getBounds().x + playerCharacter.getVelocity().x);
         } else {
-            startX = endX = (int) Math.floor(bob.getBounds().x + bob.getBounds().width + bob.getVelocity().x);
+            startX = endX = (int) Math.floor(playerCharacter.getBounds().x + playerCharacter.getBounds().width + playerCharacter.getVelocity().x);
         }
 
-        // get the block(s) bob can collide with
+        // get the block(s) playerCharacter can collide with
         populateCollidableBlocks(startX, startY, endX, endY);
 
-        // simulate bob's movement on the X
-        bobRect.x += bob.getVelocity().x;
+        // simulate playerCharacter's movement on the X
+        playerCharacterRect.x += playerCharacter.getVelocity().x;
 
         // clear collision boxes in world
         world.getCollisionRects().clear();
 
-        // if bob collides, make his horizontal velocity 0
+        // if playerCharacter collides, make his horizontal velocity 0
         for (Block block : collidable) {
             if (block == null) continue;
-            if (bobRect.overlaps(block.getBounds())) {
-                bob.getVelocity().x = 0;
+            if (playerCharacterRect.overlaps(block.getBounds())) {
+                playerCharacter.getVelocity().x = 0;
                 world.getCollisionRects().add(block.getBounds());
                 break;
             }
         }
 
         // reset the x position of the collision box
-        bobRect.x = bob.getPosition().x;
+        playerCharacterRect.x = playerCharacter.getPosition().x;
 
         // the same thing but on the vertical Y axis
-        startX = (int) bob.getBounds().x;
-        endX = (int) (bob.getBounds().x + bob.getBounds().width);
-        if (bob.getVelocity().y < 0) {
-            startY = endY = (int) Math.floor(bob.getBounds().y + bob.getVelocity().y);
+        startX = (int) playerCharacter.getBounds().x;
+        endX = (int) (playerCharacter.getBounds().x + playerCharacter.getBounds().width);
+        if (playerCharacter.getVelocity().y < 0) {
+            startY = endY = (int) Math.floor(playerCharacter.getBounds().y + playerCharacter.getVelocity().y);
         } else {
-            startY = endY = (int) Math.floor(bob.getBounds().y + bob.getBounds().height + bob.getVelocity().y);
+            startY = endY = (int) Math.floor(playerCharacter.getBounds().y + playerCharacter.getBounds().height + playerCharacter.getVelocity().y);
         }
 
         populateCollidableBlocks(startX, startY, endX, endY);
 
-        bobRect.y += bob.getVelocity().y;
+        playerCharacterRect.y += playerCharacter.getVelocity().y;
 
         for (Block block : collidable) {
             if (block == null) continue;
-            if (bobRect.overlaps(block.getBounds())) {
-                if (bob.getVelocity().y < 0) {
+            if (playerCharacterRect.overlaps(block.getBounds())) {
+                if (playerCharacter.getVelocity().y < 0) {
                     grounded = true;
                 }
-                bob.getVelocity().y = 0;
+                playerCharacter.getVelocity().y = 0;
                 world.getCollisionRects().add(block.getBounds());
                 break;
             }
         }
         // reset the collision box's position on Y
-        bobRect.y = bob.getPosition().y;
+        playerCharacterRect.y = playerCharacter.getPosition().y;
 
-        // update Bob's position
-        bob.getPosition().add(bob.getVelocity());
-        bob.getBounds().x = bob.getPosition().x;
-        bob.getBounds().y = bob.getPosition().y;
+        // update playerCharacter's position
+        playerCharacter.getPosition().add(playerCharacter.getVelocity());
+        playerCharacter.getBounds().x = playerCharacter.getPosition().x;
+        playerCharacter.getBounds().y = playerCharacter.getPosition().y;
 
         // un-scale velocity (not in frame time)
-        bob.getVelocity().scl(1 / delta);
+        playerCharacter.getVelocity().scl(1 / delta);
 
     }
 
@@ -220,44 +220,44 @@ public class PlayerCharacterController {
         }
     }
 
-    /** Change Bob's state and parameters based on input controls **/
+    /** Change playerCharacter's state and parameters based on input controls **/
     private boolean processInput() {
         if (keys.get(Keys.JUMP)) {
-            if (!bob.getState().equals(PlayerCharacter.State.JUMPING)) {
+            if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
                 jumpingPressed = true;
                 jumpPressedTime = System.currentTimeMillis();
-                bob.setState(PlayerCharacter.State.JUMPING);
-                bob.getVelocity().y = MAX_JUMP_SPEED;
+                playerCharacter.setState(PlayerCharacter.State.JUMPING);
+                playerCharacter.getVelocity().y = MAX_JUMP_SPEED;
                 grounded = false;
             } else {
                 if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
                     jumpingPressed = false;
                 } else {
                     if (jumpingPressed) {
-                        bob.getVelocity().y = MAX_JUMP_SPEED;
+                        playerCharacter.getVelocity().y = MAX_JUMP_SPEED;
                     }
                 }
             }
         }
         if (keys.get(Keys.LEFT)) {
             // left is pressed
-            bob.setFacingLeft(true);
-            if (!bob.getState().equals(PlayerCharacter.State.JUMPING)) {
-                bob.setState(PlayerCharacter.State.WALKING);
+            playerCharacter.setFacingLeft(true);
+            if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+                playerCharacter.setState(PlayerCharacter.State.WALKING);
             }
-            bob.getAcceleration().x = -ACCELERATION;
+            playerCharacter.getAcceleration().x = -ACCELERATION;
         } else if (keys.get(Keys.RIGHT)) {
             // left is pressed
-            bob.setFacingLeft(false);
-            if (!bob.getState().equals(PlayerCharacter.State.JUMPING)) {
-                bob.setState(PlayerCharacter.State.WALKING);
+            playerCharacter.setFacingLeft(false);
+            if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+                playerCharacter.setState(PlayerCharacter.State.WALKING);
             }
-            bob.getAcceleration().x = ACCELERATION;
+            playerCharacter.getAcceleration().x = ACCELERATION;
         } else {
-            if (!bob.getState().equals(PlayerCharacter.State.JUMPING)) {
-                bob.setState(PlayerCharacter.State.IDLE);
+            if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+                playerCharacter.setState(PlayerCharacter.State.IDLE);
             }
-            bob.getAcceleration().x = 0;
+            playerCharacter.getAcceleration().x = 0;
 
         }
         return false;
