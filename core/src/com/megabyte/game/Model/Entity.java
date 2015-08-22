@@ -17,12 +17,13 @@ public abstract class Entity {
         IDLE, WALKING, JUMPING, DYING
     }
 
-    public static final float SIZE = 0.5f; // half a unit
     private State state = State.IDLE;
     boolean facingLeft = true;
     float stateTime = 0;
+    private static float SIZE;
 
-    public Entity (Vector2 position) {
+    public Entity (Vector2 position, float SIZE) {
+        this.SIZE = SIZE;
         this.setPosition(position);
         this.setBounds(new Rectangle(position.x, position.y, SIZE, SIZE));
     }

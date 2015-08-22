@@ -66,7 +66,7 @@ public class World {
     }
 
     private void createDemoWorld() {
-        playerCharacter = new PlayerCharacter(new Vector2(7, 2));
+        playerCharacter = new PlayerCharacter(new Vector2(3, 2));
         level = new Level();
     }
 }
