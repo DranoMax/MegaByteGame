@@ -10,7 +10,7 @@ import com.megabyte.game.Model.World;
 import java.util.HashMap;
 import java.util.Map;
 
-public class PlayerCharacterController {
+public class PlayerCharacterController extends Controller {
 
     enum Keys {
         LEFT, RIGHT, JUMP, FIRE
@@ -23,7 +23,6 @@ public class PlayerCharacterController {
     private static final float DAMP 			= 0.90f;
     private static final float MAX_VEL 			= 4f;
 
-    private World world;
     private PlayerCharacter playerCharacter;
     private long	jumpPressedTime;
     private boolean jumpingPressed;
@@ -50,7 +49,7 @@ public class PlayerCharacterController {
     private Array<Block> collidable = new Array<Block>();
 
     public PlayerCharacterController(World world) {
-        this.world = world;
+        this.setWorld(world);
         this.playerCharacter = world.getPlayerCharacter();
     }
 
@@ -90,6 +89,7 @@ public class PlayerCharacterController {
     }
 
     /** The main update method **/
+    @Override
     public void update(float delta) {
         // Processing the input - setting the states of playerCharacter
         processInput();
@@ -156,14 +156,14 @@ public class PlayerCharacterController {
         playerCharacterRect.x += playerCharacter.getVelocity().x;
 
         // clear collision boxes in world
-        world.getCollisionRects().clear();
+        this.getWorld().getCollisionRects().clear();
 
         // if playerCharacter collides, make his horizontal velocity 0
         for (Block block : collidable) {
             if (block == null) continue;
             if (playerCharacterRect.overlaps(block.getBounds())) {
                 playerCharacter.getVelocity().x = 0;
-                world.getCollisionRects().add(block.getBounds());
+                this.getWorld().getCollisionRects().add(block.getBounds());
                 break;
             }
         }
@@ -191,7 +191,7 @@ public class PlayerCharacterController {
                     grounded = true;
                 }
                 playerCharacter.getVelocity().y = 0;
-                world.getCollisionRects().add(block.getBounds());
+                this.getWorld().getCollisionRects().add(block.getBounds());
                 break;
             }
         }
@@ -213,8 +213,8 @@ public class PlayerCharacterController {
         collidable.clear();
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
-                if (x >= 0 && x < world.getLevel().getWidth() && y >=0 && y < world.getLevel().getHeight()) {
-                    collidable.add(world.getLevel().get(x, y));
+                if (x >= 0 && x < this.getWorld().getLevel().getWidth() && y >=0 && y < this.getWorld().getLevel().getHeight()) {
+                    collidable.add(this.getWorld().getLevel().get(x, y));
                 }
             }
         }
