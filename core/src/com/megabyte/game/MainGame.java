@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megabyte.game.Entities.PlayerCharacter;
+import com.megabyte.game.Model.PlayerCharacter;
 
 public class MainGame extends ApplicationAdapter {
 	private OrthographicCamera camera;

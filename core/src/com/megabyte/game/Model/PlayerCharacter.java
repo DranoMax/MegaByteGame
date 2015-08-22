@@ -1,4 +1,4 @@
-package com.megabyte.game.Entities;
+package com.megabyte.game.Model;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -40,7 +40,7 @@ public class PlayerCharacter extends Entity{
         processInput();
 
         this.getAcceleration().y = GRAVITY;
-      //  this.getAcceleration().scl(delta);
+        this.getAcceleration().scl(delta);
         this.getVelocity().add(this.getAcceleration().x, this.getAcceleration().y);
         if (this.getAcceleration().x == 0) this.getVelocity().x *= DAMP;
         if (this.getVelocity().x > MAX_VEL) {
@@ -51,8 +51,9 @@ public class PlayerCharacter extends Entity{
         }
 
         this.updatePosition();
-        if (this.getPosition().y < 0f) {
-            this.setY(0f);
+        if (this.getPosition().y < 0) {
+            this.getPosition().y = 0f;
+            this.setPosition(this.getPosition());
             if (this.getState().equals(State.JUMPING)) {
                 this.setState(State.IDLE);
             }
