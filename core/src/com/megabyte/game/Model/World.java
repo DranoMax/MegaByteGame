@@ -49,8 +49,8 @@ public class World {
 
         List<Block> blocks = new ArrayList<Block>();
         Block block;
-        for (int col = x; col <= x2; col++) {
-            for (int row = y; row <= y2; row++) {
+        for (int col = x; col < x2; col++) {
+            for (int row = y; row < y2; row++) {
                 block = level.getBlocks()[col][row];
                 if (block != null) {
                     blocks.add(block);

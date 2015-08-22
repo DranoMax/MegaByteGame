@@ -1,5 +1,7 @@
 package com.megabyte.game.Controller;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
@@ -27,6 +29,9 @@ public class PlayerCharacterController extends Controller {
     private long	jumpPressedTime;
     private boolean jumpingPressed;
     private boolean grounded = false;
+
+    // Jumping sound effect
+    Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump_sound.wav"));
 
     // This is the rectangle pool used in collision detection
     // Good to avoid instantiation each frame
@@ -224,6 +229,7 @@ public class PlayerCharacterController extends Controller {
     private boolean processInput() {
         if (keys.get(Keys.JUMP)) {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+                jumpSound.play(0.5f);
                 jumpingPressed = true;
                 jumpPressedTime = System.currentTimeMillis();
                 playerCharacter.setState(PlayerCharacter.State.JUMPING);
