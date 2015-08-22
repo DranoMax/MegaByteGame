@@ -4,47 +4,36 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.megabyte.game.Model.Mom;
-import com.megabyte.game.Model.PlayerCharacter;
+import com.megabyte.game.Model.World;
+
 
 public class MainGame extends ApplicationAdapter {
 	private OrthographicCamera camera;
+	private World world;
 	SpriteBatch batch;
-	PlayerCharacter playerCharacter;
-	Mom mom;
 
 	// Sets up our camera and sets the window to a specific width
 	private void setupCamera() {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, 800, 480);
 	}
-
-	// Sets up all the graphics + spriteBatch for drawing sprites
-	private void setupEntities() {
-		batch = new SpriteBatch();
-		playerCharacter = new PlayerCharacter(new Sprite(new Texture("badlogic.jpg")));
-		mom = new Mom();
-	}
 	
 	@Override
 	public void create () {
 		setupCamera();
-		setupEntities();
+		batch = new SpriteBatch();
+		world = new World();
 	}
 
 	@Override
 	public void render () {
-		// Listen for keyboard events so that we move our PC around
-		playerCharacter.update(Gdx.graphics.getDeltaTime());
-		mom.update(Gdx.graphics.getDeltaTime());
+		world.update();
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		playerCharacter.getSprite().draw(batch);
-		mom.getSprite().draw(batch);
+		world.getPlayerCharacter().getSprite().draw(batch);
+		world.getMom().getSprite().draw(batch);
 		batch.end();
 	}
 }
