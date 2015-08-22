@@ -1,150 +1,112 @@
 package com.megabyte.game.Model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 
-/**
- * Created by ascroggins on 8/21/2015.
- *
- * A lot of this code (specifically the jump code) came from this project: http://www.javacodegeeks.com/2013/03/android-game-development-with-libgdx-jumping-gravity-and-improved-movement-part-3.html
- * Big thanks!
- */
-public class PlayerCharacter extends Entity{
+public class PlayerCharacter {
 
-    public enum State {
-        IDLE, WALKING, JUMPING, DYING
-    }
-    private State state = State.IDLE;
-    boolean	facingLeft = true;
-    private static final long LONG_JUMP_PRESS 	= 150l;
-    private static final float ACCELERATION 	= 30f;
-    private static final float GRAVITY 			= -20f;
-    private static final float MAX_JUMP_SPEED	= 7f;
-    private static final float DAMP 			= 0.90f;
-    private static final float MAX_VEL 			= 10f;
+	public enum State {
+		IDLE, WALKING, JUMPING, DYING
+	}
+	
+	public static final float SIZE = 0.5f; // half a unit
 
-    // these are temporary
-    private static final float WIDTH = 10f;
-    private long	jumpPressedTime;
-    private boolean jumpingPressed;
+	Vector2 	position = new Vector2();
+	Vector2 	acceleration = new Vector2();
+	Vector2 	velocity = new Vector2();
+	Rectangle 	bounds = new Rectangle();
+	State		state = State.IDLE;
+	boolean		facingLeft = true;
+	float		stateTime = 0;
+	boolean		longJump = false;
 
+	public PlayerCharacter(Vector2 position) {
+		this.position = position;
+		this.bounds.x = position.x;
+		this.bounds.y = position.y;
+		this.bounds.height = SIZE;
+		this.bounds.width = SIZE;
+	}
 
-    public void jumpReleased() {
-     //   keys.get(keys.put(Keys.JUMP, false));
-        jumpingPressed = false;
-    }
+	
+	public boolean isFacingLeft() {
+		return facingLeft;
+	}
 
-    @Override
-    public void update(float delta) {
-        processInput();
+	public void setFacingLeft(boolean facingLeft) {
+		this.facingLeft = facingLeft;
+	}
 
-        this.getAcceleration().y = GRAVITY;
-        this.getAcceleration().scl(delta);
-        this.getVelocity().add(this.getAcceleration().x, this.getAcceleration().y);
-        if (this.getAcceleration().x == 0) this.getVelocity().x *= DAMP;
-        if (this.getVelocity().x > MAX_VEL) {
-            this.getVelocity().x = MAX_VEL;
-        }
-        if (this.getVelocity().x < -MAX_VEL) {
-            this.getVelocity().x = -MAX_VEL;
-        }
+	public Vector2 getPosition() {
+		return position;
+	}
 
-        // Get Keyboard updates
-        this.updatePosition();
+	public Vector2 getAcceleration() {
+		return acceleration;
+	}
 
-        // Don't fall through the floor!
-        if (this.getPosition().y < 0) {
-            this.setY(0f);
-            if (this.getState().equals(State.JUMPING)) {
-                this.setState(State.IDLE);
-            }
-        }
-        // Don't run through the left wall!
-        if (this.getPosition().x < 0) {
-            this.getPosition().x = 0;
-            this.setPosition(this.getPosition());
-            if (!this.getState().equals(State.JUMPING)) {
-                this.setState(State.IDLE);
-            }
-        }
-        // Don't run through the right wall!
-        if (this.getPosition().x > WIDTH ) {
-            this.getPosition().x = WIDTH ;
-            this.setPosition(this.getPosition());
-            if (!this.getState().equals(State.JUMPING)) {
-                this.setState(State.IDLE);
-            }
-        }
-    }
+	public Vector2 getVelocity() {
+		return velocity;
+	}
 
-    /** Change this's state and parameters based on input controls **/
-    private boolean processInput() {
-        if(Gdx.input.isKeyPressed(Input.Keys.W) || Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            if (!this.getState().equals(State.JUMPING)) {
-                jumpingPressed = true;
-                jumpPressedTime = System.currentTimeMillis();
-                this.setState(State.JUMPING);
-                this.getVelocity().y = MAX_JUMP_SPEED;
-            } else {
-                if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
-                    jumpingPressed = false;
-                } else {
-                    if (jumpingPressed) {
-                        this.getVelocity().y = MAX_JUMP_SPEED;
-                    }
-                }
-            }
-        }
-        if(Gdx.input.isKeyPressed(Input.Keys.A) || Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            // left is pressed
-            this.setFacingLeft(true);
-            if (!this.getState().equals(State.JUMPING)) {
-                this.setState(State.WALKING);
-            }
-            this.getAcceleration().x = -ACCELERATION;
-        } else if(Gdx.input.isKeyPressed(Input.Keys.D) || Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            // left is pressed
-            this.setFacingLeft(false);
-            if (!this.getState().equals(State.JUMPING)) {
-                this.setState(State.WALKING);
-            }
-            this.getAcceleration().x = ACCELERATION;
-        } else {
-            if (!this.getState().equals(State.JUMPING)) {
-                this.setState(State.IDLE);
-            }
-            this.getAcceleration().x = 0;
+	public Rectangle getBounds() {
+		return bounds;
+	}
 
-        }
-        return false;
-    }
+	public State getState() {
+		return state;
+	}
+	
+	public void setState(State newState) {
+		this.state = newState;
+	}
 
-    public PlayerCharacter(Sprite sprite) {
-        this.setSprite(sprite);
-    }
+	public float getStateTime() {
+		return stateTime;
+	}
+
+	public boolean isLongJump() {
+		return longJump;
+	}
 
 
-    private void updatePosition() {
-            this.setPosition(this.getPosition().add(this.getVelocity()));
-//            bounds.x = position.x;
-//            bounds.y = position.y;
-//            stateTime += delta;
-    }
+	public void setLongJump(boolean longJump) {
+		this.longJump = longJump;
+	}
 
-    public State getState() {
-        return state;
-    }
 
-    public void setState(State newState) {
-        this.state = newState;
-    }
+	public void setPosition(Vector2 position) {
+		this.position = position;
+		this.bounds.setX(position.x);
+		this.bounds.setY(position.y);
+	}
 
-    public boolean isFacingLeft() {
-        return facingLeft;
-    }
 
-    public void setFacingLeft(boolean facingLeft) {
-        this.facingLeft = facingLeft;
-    }
+	public void setAcceleration(Vector2 acceleration) {
+		this.acceleration = acceleration;
+	}
+
+
+	public void setVelocity(Vector2 velocity) {
+		this.velocity = velocity;
+	}
+
+
+	public void setBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
+
+
+	public void setStateTime(float stateTime) {
+		this.stateTime = stateTime;
+	}
+
+
+	public void update(float delta) {
+//		position.add(velocity.tmp().mul(delta));
+//		bounds.x = position.x;
+//		bounds.y = position.y;
+		stateTime += delta;
+	}
+	
 }

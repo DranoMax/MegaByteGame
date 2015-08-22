@@ -1,6 +1,7 @@
 package com.megabyte.game.Model;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -10,24 +11,25 @@ public abstract class Entity {
     private Sprite sprite;
     private Vector2 acceleration = new Vector2(0,0);
     private Vector2 velocity = new Vector2(0,0);
+    private Rectangle bounds = new Rectangle();
 
     public void update(float delta) {
     }
 
     public float getX() {
-        return this.sprite.getX();
+        return sprite.getX();
     }
 
     public float getY() {
-        return this.sprite.getY();
+        return sprite.getY();
     }
 
     public void setX(float x) {
-        this.sprite.setX(x);
+        sprite.setX(x);
     }
 
     public void setY(float y) {
-        this.sprite.setY(y);
+        sprite.setY(y);
     }
 
     public Vector2 getPosition() {
@@ -35,7 +37,8 @@ public abstract class Entity {
     }
 
     public void setPosition(Vector2 position) {
-        this.sprite.setPosition(position.x, position.y);
+        sprite.setX(position.x);
+        sprite.setY(position.y);
     }
 
     public Sprite getSprite() {
@@ -60,5 +63,13 @@ public abstract class Entity {
 
     public void setVelocity(Vector2 velocity) {
         this.velocity = velocity;
+    }
+
+    public Rectangle getBounds() {
+        return bounds;
+    }
+
+    public void setBounds(Rectangle bounds) {
+        this.bounds = bounds;
     }
 }
