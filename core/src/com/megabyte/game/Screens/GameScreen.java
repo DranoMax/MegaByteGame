@@ -6,6 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.megabyte.game.Controller.KidController;
 import com.megabyte.game.Controller.PlayerCharacterController;
 import com.megabyte.game.Model.World;
 import com.megabyte.game.View.WorldRenderer;
@@ -15,7 +16,8 @@ public class GameScreen implements Screen, InputProcessor {
 
     private World world;
     private WorldRenderer renderer;
-    private PlayerCharacterController controller;
+    private PlayerCharacterController playerCharacterController;
+    private KidController kidController;
 
     private int width, height;
 
@@ -23,7 +25,8 @@ public class GameScreen implements Screen, InputProcessor {
     public void show() {
         world = new World();
         renderer = new WorldRenderer(world, false);
-        controller = new PlayerCharacterController(world);
+        playerCharacterController = new PlayerCharacterController(world);
+        kidController = new KidController(world);
         Gdx.input.setInputProcessor(this);
     }
 
@@ -32,7 +35,8 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.gl.glClearColor(0.1f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        controller.update(delta);
+        playerCharacterController.update(delta);
+        kidController.update(delta);
         renderer.render();
     }
 
@@ -68,26 +72,26 @@ public class GameScreen implements Screen, InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         if (keycode == Keys.LEFT || keycode == Keys.A)
-            controller.leftPressed();
+            playerCharacterController.leftPressed();
         if (keycode == Keys.RIGHT || keycode == Keys.D)
-            controller.rightPressed();
+            playerCharacterController.rightPressed();
         if (keycode == Keys.UP || keycode == Keys.SPACE)
-            controller.jumpPressed();
+            playerCharacterController.jumpPressed();
         if (keycode == Keys.X)
-            controller.firePressed();
+            playerCharacterController.firePressed();
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         if (keycode == Keys.LEFT || keycode == Keys.A)
-            controller.leftReleased();
+            playerCharacterController.leftReleased();
         if (keycode == Keys.RIGHT || keycode == Keys.D)
-            controller.rightReleased();
+            playerCharacterController.rightReleased();
         if (keycode == Keys.UP || keycode == Keys.SPACE)
-            controller.jumpReleased();
+            playerCharacterController.jumpReleased();
         if (keycode == Keys.X)
-            controller.fireReleased();
+            playerCharacterController.fireReleased();
         if (keycode == Keys.Z)
             renderer.setDebug(!renderer.isDebug());
         return true;
@@ -104,10 +108,10 @@ public class GameScreen implements Screen, InputProcessor {
         if (!Gdx.app.getType().equals(ApplicationType.Android))
             return false;
         if (x < width / 2 && y > height / 2) {
-            controller.leftPressed();
+            playerCharacterController.leftPressed();
         }
         if (x > width / 2 && y > height / 2) {
-            controller.rightPressed();
+            playerCharacterController.rightPressed();
         }
         return true;
     }
@@ -117,10 +121,10 @@ public class GameScreen implements Screen, InputProcessor {
         if (!Gdx.app.getType().equals(ApplicationType.Android))
             return false;
         if (x < width / 2 && y > height / 2) {
-            controller.leftReleased();
+            playerCharacterController.leftReleased();
         }
         if (x > width / 2 && y > height / 2) {
-            controller.rightReleased();
+            playerCharacterController.rightReleased();
         }
         return true;
     }
