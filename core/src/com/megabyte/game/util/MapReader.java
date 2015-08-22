@@ -10,6 +10,12 @@ import java.util.List;
 
 /**
  * Created by ascroggins on 8/22/2015.
+ *
+ * When creating maps,
+ * x's = blocks
+ * o's = empty space
+ * s   = Player Character start location
+ * m   = mom
  */
 public class MapReader {
 

@@ -1,7 +1,6 @@
 package com.megabyte.game.Model;
 
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
@@ -17,6 +16,8 @@ public class World {
     /** The collision boxes **/
     Array<Rectangle> collisionRects = new Array<Rectangle>();
 
+    ArrayList<Entity> enemies = new ArrayList<Entity>();
+
     // Getters -----------
 
     public Array<Rectangle> getCollisionRects() {
@@ -25,6 +26,7 @@ public class World {
     public PlayerCharacter getPlayerCharacter() {
         return playerCharacter;
     }
+    public ArrayList<Entity> getEnemies() { return enemies; }
     public Level getLevel() {
         return level;
     }
@@ -66,7 +68,8 @@ public class World {
     }
 
     private void createDemoWorld() {
-        playerCharacter = new PlayerCharacter(new Vector2(3, 2));
         level = new Level();
+        playerCharacter = level.getPlayerCharacter();
+        enemies = level.getEnemies();
     }
 }
