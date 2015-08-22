@@ -20,6 +20,10 @@ public class WorldRenderer {
     private static final float CAMERA_HEIGHT = 7f;
     private static final float RUNNING_FRAME_DURATION = 0.06f;
 
+    // The camera always follows the player - this is where the camera focuses in the screen, and thus
+    // where the player character will always be drawn as well.
+    private static final int PLAYER_POSITION_IN_SCREEN = 5;
+
     private World world;
     private OrthographicCamera cam;
 
@@ -99,6 +103,9 @@ public class WorldRenderer {
 
 
     public void render() {
+        // We want the camera to follow the player, so we set it to the Player's position.
+        cam.position.x = world.getPlayerCharacter().getPosition().x;
+        cam.update();
         spriteBatch.begin();
         drawBlocks();
         drawPlayerCharacter();
@@ -108,10 +115,9 @@ public class WorldRenderer {
             drawDebug();
     }
 
-
     private void drawBlocks() {
         for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
-            spriteBatch.draw(blockTexture, block.getPosition().x * ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
+            spriteBatch.draw(blockTexture, (PLAYER_POSITION_IN_SCREEN+block.getPosition().x) * ppuX-cam.position.x* ppuX, block.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
         }
     }
 
@@ -127,7 +133,7 @@ public class WorldRenderer {
                 playerCharacterFrame = playerCharacter.isFacingLeft() ? playerCharacterFallLeft : playerCharacterFallRight;
             }
         }
-        spriteBatch.draw(playerCharacterFrame, playerCharacter.getPosition().x * ppuX, playerCharacter.getPosition().y * ppuY, PlayerCharacter.SIZE * ppuX, PlayerCharacter.SIZE * ppuY);
+        spriteBatch.draw(playerCharacterFrame, PLAYER_POSITION_IN_SCREEN*ppuX, playerCharacter.getPosition().y * ppuY, PlayerCharacter.SIZE * ppuX, PlayerCharacter.SIZE * ppuY);
     }
 
     private void drawDebug() {
@@ -155,6 +161,5 @@ public class WorldRenderer {
             debugRenderer.rect(rect.x, rect.y, rect.width, rect.height);
         }
         debugRenderer.end();
-
     }
 }
