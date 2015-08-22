@@ -1,5 +1,7 @@
 package com.megabyte.game.Model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.megabyte.game.util.MapReader;
 
@@ -10,6 +12,7 @@ public class Level {
     private Block[][] blocks;
     private MapReader mapReader = new MapReader();
     private char map[][];
+    Music music;
 
     public int getWidth() {
         return width;
@@ -44,7 +47,7 @@ public class Level {
     }
 
     private void loadDemoLevel() {
-
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/Necrophageon.wav"));
         mapReader.readMap();
         map = mapReader.getMap();
         height = map.length;
@@ -58,5 +61,7 @@ public class Level {
                 }
             }
         }
+        music.setLooping(true);
+        music.play();
     }
 }
