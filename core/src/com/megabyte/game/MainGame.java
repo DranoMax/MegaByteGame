@@ -35,7 +35,7 @@ public class MainGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 		// Listen for keyboard events so that we move our PC around
-		playerCharacter.keyboardListener();
+		playerCharacter.update(Gdx.graphics.getDeltaTime());
 
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
