@@ -1,12 +1,15 @@
 package com.megabyte.game.Model;
 
 import com.badlogic.gdx.math.Vector2;
+import com.megabyte.game.util.MapReader;
 
 public class Level {
 
     private int width;
     private int height;
     private Block[][] blocks;
+    private MapReader mapReader = new MapReader();
+    private char map[][];
 
     public int getWidth() {
         return width;
@@ -41,31 +44,19 @@ public class Level {
     }
 
     private void loadDemoLevel() {
-        width = 17;
-        height = 7;
+
+        mapReader.readMap();
+        map = mapReader.getMap();
+        height = map.length;
+        width = map[0].length;
         blocks = new Block[width][height];
-        for (int col = 0; col < width; col++) {
-            for (int row = 0; row < height; row++) {
-                blocks[col][row] = null;
+
+        for (int i = 0; i < width; i++) {
+            for (int x = 0; x < height; x++) {
+                if (map[x][i] == 'x') {
+                    blocks[i][height-1-x] = new Block(new Vector2(i, height-1-x));
+                }
             }
         }
-
-        for (int col = 0; col < 10; col++) {
-            blocks[col][0] = new Block(new Vector2(col, 0));
-            blocks[col][6] = new Block(new Vector2(col, 6));
-            if (col > 2) {
-                blocks[col][1] = new Block(new Vector2(col, 1));
-            }
-        }
-
-        blocks[6][3] = new Block(new Vector2(6, 3));
-        blocks[6][4] = new Block(new Vector2(6, 4));
-        blocks[6][5] = new Block(new Vector2(6, 5));
-
-        blocks[0][2] = new Block(new Vector2(0,2));
-        blocks[9][2] = new Block(new Vector2(9,2));
-        blocks[11][2] = new Block(new Vector2(11,2));
-        blocks[13][2] = new Block(new Vector2(13,2));
-        blocks[16][2] = new Block(new Vector2(16,2));
     }
 }
