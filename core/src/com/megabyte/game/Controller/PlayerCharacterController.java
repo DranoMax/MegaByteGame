@@ -27,7 +27,6 @@ public class PlayerCharacterController extends Controller {
     private PlayerCharacter playerCharacter;
     private long	jumpPressedTime;
     private boolean jumpingPressed;
-    private boolean grounded = false;
     private Rectangle attackRectangle;
 
     // Jumping sound effect
