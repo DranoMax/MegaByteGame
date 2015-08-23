@@ -1,6 +1,3 @@
-/**
- * Copyright 2015 SirsiDynix. All rights reserved.
- */
 package com.megabyte.game.Model;
 
 import com.badlogic.gdx.Gdx;
