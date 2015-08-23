@@ -3,7 +3,6 @@ package com.megabyte.game.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.PlayerCharacter;
@@ -29,7 +28,7 @@ public class PlayerCharacterController extends Controller {
     private long	jumpPressedTime;
     private boolean jumpingPressed;
     private boolean grounded = false;
-    private Vector2 attackPosition;
+    private Rectangle attackRectangle;
 
     // Jumping sound effect
     private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump_sound.wav"));
@@ -90,9 +89,8 @@ public class PlayerCharacterController extends Controller {
         keys.get(keys.put(Keys.FIRE, false));
     }
 
-    public void attackPressed(int x, int y) {
-        System.out.println("attacking: "+x+","+y);
-        attackPosition = new Vector2(x, y);
+    public void attackPressed(Rectangle attackRectangle) {
+        this.attackRectangle = attackRectangle;
     }
 
     /** The main update method **/
@@ -175,20 +173,21 @@ public class PlayerCharacterController extends Controller {
             playerCharacter.getAcceleration().x = 0;
 
         }
-        if (attackPosition != null) {
+
+        //I know this shouldn't go here, so get off my case!
+        if (attackRectangle != null) {
             //set attack state
 
             //check if enemy in area
             for (Entity enemy : getWorld().getEnemies()) {
-                System.out.println("enemy " + enemy.getClass() + ":" + enemy.getBounds());
                 //TODO: use a rectangle pool
-                Rectangle enemyRect = new Rectangle(enemy.getBounds().x, enemy.getBounds().y, enemy.getBounds().width, enemy.getBounds().height);
-                boolean hitEnemy = enemyRect.overlaps(new Rectangle(attackPosition.x, attackPosition.y, 5,5));
+                Rectangle enemyRect = new Rectangle(enemy.getBounds().x - playerCharacter.getPosition().x+5, enemy.getBounds().y, enemy.getBounds().width, enemy.getBounds().height);
+                boolean hitEnemy = enemyRect.overlaps(attackRectangle);
                 if (hitEnemy) {
                     System.out.println("hit");
                 }
             }
-            attackPosition = null;
+            attackRectangle = null;
         }
         return false;
     }

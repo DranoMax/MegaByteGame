@@ -122,7 +122,7 @@ public class GameScreen implements Screen, InputProcessor {
         if (Gdx.app.getType().equals(ApplicationType.Android))
             return false;
 
-        playerCharacterController.attackPressed(x, y);
+        playerCharacterController.attackPressed(renderer.convertScreenRectangleToWorldRectangle(x,y,20,20));
         return true;
     }
 
