@@ -10,6 +10,7 @@ public class DesktopLauncher {
 		config.title = "Kid and Monster Game";
 		config.width = 960;
 		config.height = 640;
+		config.resizable = false;
 		new LwjglApplication(new MainGame(), config);
 	}
 }

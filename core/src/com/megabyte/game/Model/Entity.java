@@ -1,7 +1,9 @@
 package com.megabyte.game.Model;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.megabyte.game.Controller.NPCController;
@@ -16,6 +18,19 @@ public abstract class Entity {
     private  Vector2 velocity = new Vector2();
     private Rectangle bounds = new Rectangle();
     private NPCController npcController;
+
+    /** Textures **/
+    public TextureRegion entityIdleLeft;
+    public TextureRegion entityIdleRight;
+    public TextureRegion entityFrame;
+    public TextureRegion entityJumpLeft;
+    public TextureRegion entityFallLeft;
+    public TextureRegion entityJumpRight;
+    public TextureRegion entityFallRight;
+
+    /** Animations **/
+    public Animation walkLeftAnimation;
+    public Animation walkRightAnimation;
 
     public enum State {
         IDLE, WALKING, JUMPING, DYING

@@ -33,7 +33,7 @@ public class GameScreen implements Screen, InputProcessor {
         enemies = world.getEnemies();
         // Update our enemies
         for (Entity enemy : enemies) {
-            enemy.setNpcController(new NPCController(enemy, world, new WanderBehavior()));
+            enemy.setNpcController(new NPCController(enemy, world, new WanderBehavior(enemy)));
         }
         Gdx.input.setInputProcessor(this);
     }
