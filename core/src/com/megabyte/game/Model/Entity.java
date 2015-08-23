@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.megabyte.game.Controller.NPCController;
 
 /**
  * Created by ascroggins on 8/21/2015.
@@ -14,6 +15,7 @@ public abstract class Entity {
     private Vector2 acceleration = new Vector2();
     private  Vector2 velocity = new Vector2();
     private Rectangle bounds = new Rectangle();
+    private NPCController npcController;
 
     public enum State {
         IDLE, WALKING, JUMPING, DYING
@@ -45,6 +47,14 @@ public abstract class Entity {
      * @param ppuY
      */
     public abstract void drawEntity(SpriteBatch spriteBatch, OrthographicCamera cam, float PLAYER_POSITION_IN_SCREEN, float ppuX, float ppuY);
+
+    public NPCController getNpcController() {
+        return npcController;
+    }
+
+    public void setNpcController(NPCController npcController) {
+        this.npcController = npcController;
+    }
 
     public void setAcceleration(Vector2 acceleration) {
         this.acceleration = acceleration;
