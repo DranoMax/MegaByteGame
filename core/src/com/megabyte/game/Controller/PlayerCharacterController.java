@@ -48,7 +48,7 @@ public class PlayerCharacterController extends Controller {
     };
 
     public PlayerCharacterController(World world) {
-        super(world.getPlayerCharacter(), world, null);
+        super(world.getPlayerCharacter(), world);
         this.playerCharacter = world.getPlayerCharacter();
         setupSound();
     }

@@ -9,7 +9,11 @@ public abstract class Behavior {
 
     private Entity entity;
 
-    public abstract void collideWithWall(Entity entity);
+    /**
+     * The base method to be called for updating state and executing AI actions
+     */
+    public abstract void execute();
+    public abstract void collideWithWall();
 
     public Entity getEntity() {
         return entity;

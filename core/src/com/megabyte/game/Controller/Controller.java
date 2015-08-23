@@ -3,7 +3,6 @@ package com.megabyte.game.Controller;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
-import com.megabyte.game.Controller.Behavior.Behavior;
 import com.megabyte.game.Model.Block;
 import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.World;
@@ -14,8 +13,10 @@ import com.megabyte.game.Model.World;
 public abstract class Controller {
 
     private World world;
+
     // Blocks that playerCharacter can collide with any given frame
     private Array<Block> collidable = new Array<Block>();
+
     // This is the rectangle pool used in collision detection
     // Good to avoid instantiation each frame
     private Pool<Rectangle> rectPool = new Pool<Rectangle>() {
@@ -28,13 +29,9 @@ public abstract class Controller {
     public abstract void update(float delta);
     private Entity entity;
 
-    // NPC's will have a behavior assigned to them that dictates how the react to certain situations
-    private Behavior behavior;
-
-    public Controller(Entity entity, World world, Behavior behavior) {
+    public Controller(Entity entity, World world) {
         this.entity = entity;
         this.world = world;
-        this.behavior = behavior;
     }
 
     public Entity getEntity() {
@@ -92,17 +89,7 @@ public abstract class Controller {
         for (Block block : collidable) {
             if (block == null) continue;
             if (npcRect.overlaps(block.getBounds())) {
-
-                /**
-                 * What should we do when we hit a wall?  Some NPC's might try to jump over it.  Some might reverse direction.
-                 * Let's see what our behavior tells us to do.
-                 */
-                if (behavior != null) {
-                    behavior.collideWithWall(entity);
-                } else {
-                    // The player is controlling this entity, so we don't want to do anything special.
-                    entity.getVelocity().x = 0;
-                }
+                entity.getVelocity().x = 0;
                 this.getWorld().getCollisionRects().add(block.getBounds());
                 break;
             }
@@ -149,7 +136,7 @@ public abstract class Controller {
     }
 
     /** populate the collidable array with the blocks found in the enclosing coordinates **/
-    private void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
+    public void populateCollidableBlocks(int startX, int startY, int endX, int endY) {
         collidable.clear();
         for (int x = startX; x <= endX; x++) {
             for (int y = startY; y <= endY; y++) {
@@ -158,5 +145,21 @@ public abstract class Controller {
                 }
             }
         }
+    }
+
+    public Pool<Rectangle> getRectPool() {
+        return rectPool;
+    }
+
+    public void setRectPool(Pool<Rectangle> rectPool) {
+        this.rectPool = rectPool;
+    }
+
+    public Array<Block> getCollidable() {
+        return collidable;
+    }
+
+    public void setCollidable(Array<Block> collidable) {
+        this.collidable = collidable;
     }
 }
