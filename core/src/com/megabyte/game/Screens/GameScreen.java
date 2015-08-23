@@ -6,7 +6,7 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.megabyte.game.Controller.Behavior.WanderBehavior;
+import com.megabyte.game.Controller.Behavior.FollowBehavior;
 import com.megabyte.game.Controller.NPCController;
 import com.megabyte.game.Controller.PlayerCharacterController;
 import com.megabyte.game.Model.Entity;
@@ -33,7 +33,9 @@ public class GameScreen implements Screen, InputProcessor {
         enemies = world.getEnemies();
         // Update our enemies
         for (Entity enemy : enemies) {
-            enemy.setNpcController(new NPCController(enemy, world, new WanderBehavior(enemy)));
+            NPCController controller = new NPCController(enemy, world);
+            enemy.setNpcController(controller);
+            enemy.getNpcController().setBehavior(new FollowBehavior(controller));
         }
         Gdx.input.setInputProcessor(this);
     }

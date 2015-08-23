@@ -57,8 +57,8 @@ public class WorldRenderer {
         cam.update();
         spriteBatch.begin();
         drawBlocks();
-        drawEnemies();
         drawPlayerCharacter();
+        drawEnemies();
         spriteBatch.end();
         drawCollisionBlocks();
         if (debug)
