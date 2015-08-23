@@ -18,7 +18,7 @@ public class Block extends Entity{
 
     @Override
     public void loadTextures() {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/kidAndCat.atlas"));
         blockTexture = atlas.findRegion("block");
     }
 
