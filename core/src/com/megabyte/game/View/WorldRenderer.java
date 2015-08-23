@@ -58,8 +58,8 @@ public class WorldRenderer {
         cam.update();
         spriteBatch.begin();
         drawBlocks();
-        drawEnemies();
         drawPlayerCharacter();
+        drawEnemies();
         drawSpeechBubbles();
         spriteBatch.end();
         drawCollisionBlocks();

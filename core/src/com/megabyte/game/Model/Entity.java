@@ -93,7 +93,7 @@ public abstract class Entity extends Observable
         this.facingLeft = facingLeft;
     }
 
-    public static float getSIZE() {
+    public float getSIZE() {
         return SIZE;
     }
 

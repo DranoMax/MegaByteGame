@@ -1,13 +1,13 @@
 package com.megabyte.game.Controller.Behavior;
 
-import com.megabyte.game.Model.Entity;
+import com.megabyte.game.Controller.Controller;
 
 /**
  * Created by ascroggins on 8/23/2015.
  */
 public abstract class Behavior {
 
-    private Entity entity;
+    private Controller controller;
 
     /**
      * The base method to be called for updating state and executing AI actions
@@ -15,11 +15,13 @@ public abstract class Behavior {
     public abstract void execute();
     public abstract void collideWithWall();
 
-    public Entity getEntity() {
-        return entity;
+
+    public Controller getController() {
+        return controller;
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public void setController(Controller controller) {
+        this.controller = controller;
     }
+
 }

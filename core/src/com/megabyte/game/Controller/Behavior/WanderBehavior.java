@@ -1,6 +1,7 @@
 package com.megabyte.game.Controller.Behavior;
 
 import com.badlogic.gdx.math.Vector2;
+import com.megabyte.game.Controller.Controller;
 import com.megabyte.game.Model.Entity;
 
 /**
@@ -11,11 +12,12 @@ public class WanderBehavior extends Behavior {
     private Vector2 moveSpeed;
     private double startTime = 0;
     private double endTime = 0;
-
     private double waitTime = 0;
+    private Entity entity;
 
-    public WanderBehavior(Entity entity) {
-        this.setEntity(entity);
+    public WanderBehavior(Controller controller) {
+        this.setController(controller);
+        entity = controller.getEntity();
         moveSpeed = new Vector2(2, entity.getVelocity().y);
         entity.setVelocity(moveSpeed.cpy());
         entity.setFacingLeft(false);
@@ -27,8 +29,6 @@ public class WanderBehavior extends Behavior {
      * For wandering behavior, if we hit a wall, we'll simply reverse direction.
      */
     public void collideWithWall() {
-        Entity entity = this.getEntity();
-
         entity.setFacingLeft(!(entity.isFacingLeft()));
         entity.setVelocity(new Vector2(-entity.getVelocity().x, entity.getVelocity().y));
     }
@@ -38,8 +38,6 @@ public class WanderBehavior extends Behavior {
      * We will randomly start and stop moving to make the animations more interesting
      */
     public void execute() {
-        Entity entity = this.getEntity();
-
         if (startTime == 0) {
             startTime = System.currentTimeMillis();
             endTime = startTime + Math.random()*1000+100;
@@ -65,7 +63,7 @@ public class WanderBehavior extends Behavior {
      */
     private void randomDirection() {
         if (Math.random() == 1) {
-            this.getEntity().setFacingLeft(!this.getEntity().isFacingLeft());
+            entity.setFacingLeft(!entity.isFacingLeft());
             moveSpeed.x = -moveSpeed.x;
         }
     }
