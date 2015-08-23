@@ -7,5 +7,15 @@ import com.megabyte.game.Model.Entity;
  */
 public abstract class Behavior {
 
+    private Entity entity;
+
     public abstract void collideWithWall(Entity entity);
+
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public void setEntity(Entity entity) {
+        this.entity = entity;
+    }
 }
