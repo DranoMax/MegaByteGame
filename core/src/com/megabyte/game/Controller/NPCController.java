@@ -13,21 +13,44 @@ import com.megabyte.game.Model.World;
  * enemies at different times.  I believe this is known as the "Adaptor Pattern".
  */
 public class NPCController extends Controller {
-
     // NPC's will have a behavior assigned to them that dictates how the react to certain situations
     private Behavior behavior;
+    private Entity entity;
+    private static final float GRAVITY 			= -20f;
+    private static final float DAMP 			= 0.90f;
+    private static final float MAX_VEL 			= 4f;
 
-    public NPCController(Entity npc, World world, Behavior behavior) {
+    public NPCController(Entity npc, World world) {
         super(npc, world);
-
-        this.behavior = behavior;
+        entity = npc;
     }
 
     @Override
     public void update(float delta) {
         this.behavior.execute();
+
+        // If entity is grounded then reset the state to IDLE
+        if (this.isGrounded() && entity.getState().equals(Entity.State.JUMPING)) {
+            entity.setState(Entity.State.IDLE);
+        }
+
+        // Setting initial vertical acceleration
+        entity.getAcceleration().y = GRAVITY;
+
+        // Convert acceleration to frame time
+        entity.getAcceleration().scl(delta);
+
+        // apply acceleration to change velocity
+        entity.getVelocity().add(entity.getAcceleration().x, entity.getAcceleration().y);
+
+        // checking collisions with the surrounding blocks depending on entity's velocity
+        checkCollisionWithBlocks(delta);
+
+        // apply damping to halt entity nicely
+        entity.getVelocity().x *= DAMP;
+
         this.checkCollisionWithBlocks(delta);
-        this.getEntity().update(delta);
+        entity.update(delta);
 
     }
 
@@ -121,7 +144,14 @@ public class NPCController extends Controller {
 
         // un-scale velocity (not in frame time)
         entity.getVelocity().scl(1 / delta);
+    }
 
+    public Behavior getBehavior() {
+        return behavior;
+    }
+
+    public void setBehavior(Behavior behavior) {
+        this.behavior = behavior;
     }
 
 }

@@ -90,7 +90,7 @@ public abstract class Entity {
         this.facingLeft = facingLeft;
     }
 
-    public static float getSIZE() {
+    public float getSIZE() {
         return SIZE;
     }
 
