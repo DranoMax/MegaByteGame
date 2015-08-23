@@ -24,6 +24,6 @@ public class Block extends Entity{
 
     @Override
     public void drawEntity(SpriteBatch spriteBatch, OrthographicCamera cam, float PLAYER_POSITION_IN_SCREEN, float ppuX, float ppuY) {
-        spriteBatch.draw(blockTexture, (PLAYER_POSITION_IN_SCREEN+this.getPosition().x) * ppuX-cam.position.x* ppuX, this.getPosition().y * ppuY, Block.SIZE * ppuX, Block.SIZE * ppuY);
+        spriteBatch.draw(blockTexture, (PLAYER_POSITION_IN_SCREEN+this.getPosition().x) * ppuX-cam.position.x* ppuX, this.getPosition().y * ppuY, SIZE * ppuX, SIZE * ppuY);
     }
 }
