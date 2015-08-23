@@ -79,7 +79,6 @@ public class PlayerCharacter extends Entity {
 				playerCharacterFrame = this.isFacingLeft() ? playerCharacterFallLeft : playerCharacterFallRight;
 			}
 		}
-		spriteBatch.draw(playerCharacterFrame, PLAYER_POSITION_IN_SCREEN*ppuX, this.getPosition().y * ppuY, PlayerCharacter.SIZE * ppuX, PlayerCharacter.SIZE * ppuY);
+		spriteBatch.draw(playerCharacterFrame, PLAYER_POSITION_IN_SCREEN*ppuX, this.getPosition().y * ppuY, SIZE * ppuX, SIZE * ppuY);
 	}
-	
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Rectangle;
 import com.megabyte.game.Model.Block;
+import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.PlayerCharacter;
 import com.megabyte.game.Model.World;
 
@@ -56,6 +57,7 @@ public class WorldRenderer {
         cam.update();
         spriteBatch.begin();
         drawBlocks();
+        drawEnemies();
         drawPlayerCharacter();
         spriteBatch.end();
         drawCollisionBlocks();
@@ -73,11 +75,11 @@ public class WorldRenderer {
         world.getPlayerCharacter().drawEntity(this.spriteBatch, cam, PLAYER_POSITION_IN_SCREEN, ppuX, ppuY);
     }
 
-//    private void drawEnemies() {
-//        for (Block block : world.getDrawableBlocks((int)CAMERA_WIDTH, (int)CAMERA_HEIGHT)) {
-//            block.drawEntity(spriteBatch, cam, PLAYER_POSITION_IN_SCREEN, ppuX, ppuY);
-//        }
-//    }
+    private void drawEnemies() {
+        for (Entity enemy : world.getEnemies()) {
+            enemy.drawEntity(spriteBatch, cam, PLAYER_POSITION_IN_SCREEN, ppuX, ppuY);
+        }
+    }
 
     private void drawDebug() {
         // render blocks
