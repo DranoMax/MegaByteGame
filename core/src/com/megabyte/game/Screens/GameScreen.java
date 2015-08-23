@@ -118,14 +118,11 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public boolean touchDown(int x, int y, int pointer, int button) {
-        if (!Gdx.app.getType().equals(ApplicationType.Android))
+        //TODO: add Android/iOS support
+        if (Gdx.app.getType().equals(ApplicationType.Android))
             return false;
-        if (x < width / 2 && y > height / 2) {
-            playerCharacterController.leftPressed();
-        }
-        if (x > width / 2 && y > height / 2) {
-            playerCharacterController.rightPressed();
-        }
+
+        playerCharacterController.attackPressed(renderer.convertScreenRectangleToWorldRectangle(x,y,20,20));
         return true;
     }
 

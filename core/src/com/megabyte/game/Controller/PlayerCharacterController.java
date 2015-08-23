@@ -2,7 +2,9 @@ package com.megabyte.game.Controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.PlayerCharacter;
 import com.megabyte.game.Model.World;
 
@@ -25,6 +27,7 @@ public class PlayerCharacterController extends Controller {
     private PlayerCharacter playerCharacter;
     private long	jumpPressedTime;
     private boolean jumpingPressed;
+    private Rectangle attackRectangle;
 
     // Jumping sound effect
     private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump_sound.wav"));
@@ -83,6 +86,10 @@ public class PlayerCharacterController extends Controller {
 
     public void fireReleased() {
         keys.get(keys.put(Keys.FIRE, false));
+    }
+
+    public void attackPressed(Rectangle attackRectangle) {
+        this.attackRectangle = attackRectangle;
     }
 
     /** The main update method **/
@@ -164,6 +171,22 @@ public class PlayerCharacterController extends Controller {
             }
             playerCharacter.getAcceleration().x = 0;
 
+        }
+
+        //I know this shouldn't go here, so get off my case!
+        if (attackRectangle != null) {
+            //set attack state
+
+            //check if enemy in area
+            for (Entity enemy : getWorld().getEnemies()) {
+                //TODO: use a rectangle pool
+                Rectangle enemyRect = new Rectangle(enemy.getBounds().x - playerCharacter.getPosition().x+5, enemy.getBounds().y, enemy.getBounds().width, enemy.getBounds().height);
+                boolean hitEnemy = enemyRect.overlaps(attackRectangle);
+                if (hitEnemy) {
+                    System.out.println("hit");
+                }
+            }
+            attackRectangle = null;
         }
         return false;
     }

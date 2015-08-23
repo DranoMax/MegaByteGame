@@ -107,4 +107,9 @@ public class WorldRenderer {
         }
         debugRenderer.end();
     }
+
+    public Rectangle convertScreenRectangleToWorldRectangle(int x, int y, int width, int height) {
+        //TODO: use a rectangle pool
+        return new Rectangle(x/ppuX, CAMERA_HEIGHT-y/ppuY, width/ppuX,height/ppuY);
+    }
 }
