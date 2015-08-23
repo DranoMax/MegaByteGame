@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Block extends Entity{
 
-    public static final float SIZE = 1f;
+    public static final float SIZE = .5f;
 
     public Block(Vector2 pos) {
         super(pos, SIZE);
@@ -18,7 +18,7 @@ public class Block extends Entity{
 
     @Override
     public void loadTextures() {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/kidAndCat.atlas"));
         blockTexture = atlas.findRegion("block");
     }
 

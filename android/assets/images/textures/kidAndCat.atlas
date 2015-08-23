@@ -1,0 +1,92 @@
+
+kidAndCat.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+cat-0
+  rotate: false
+  xy: 1, 543
+  size: 540, 396
+  orig: 540, 396
+  offset: 0, 0
+  index: -1
+cat-1
+  rotate: false
+  xy: 1, 145
+  size: 540, 396
+  orig: 540, 396
+  offset: 0, 0
+  index: -1
+kid-0
+  rotate: false
+  xy: 543, 471
+  size: 414, 468
+  orig: 414, 468
+  offset: 0, 0
+  index: -1
+kid-1
+  rotate: false
+  xy: 543, 1
+  size: 414, 468
+  orig: 414, 468
+  offset: 0, 0
+  index: -1
+block
+  rotate: false
+  xy: 959, 891
+  size: 48, 48
+  orig: 48, 48
+  offset: 0, 0
+  index: -1
+
+kidAndCat2.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+cat-2
+  rotate: false
+  xy: 1, 543
+  size: 540, 396
+  orig: 540, 396
+  offset: 0, 0
+  index: -1
+cat-3
+  rotate: false
+  xy: 1, 145
+  size: 540, 396
+  orig: 540, 396
+  offset: 0, 0
+  index: -1
+kid-2
+  rotate: false
+  xy: 543, 471
+  size: 414, 468
+  orig: 414, 468
+  offset: 0, 0
+  index: -1
+kid-3
+  rotate: false
+  xy: 543, 1
+  size: 414, 468
+  orig: 414, 468
+  offset: 0, 0
+  index: -1
+
+kidAndCat3.png
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+kid-4
+  rotate: false
+  xy: 1, 1
+  size: 414, 468
+  orig: 414, 468
+  offset: 0, 0
+  index: -1
+kid-5
+  rotate: false
+  xy: 417, 1
+  size: 414, 468
+  orig: 414, 468
+  offset: 0, 0
+  index: -1
