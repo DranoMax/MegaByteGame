@@ -31,7 +31,14 @@ public class PlayerCharacterController extends Controller {
     private boolean grounded = false;
 
     // Jumping sound effect
-    Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump_sound.wav"));
+    private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump_sound.wav"));
+    private Array<Sound> touchSound = new Array<Sound>();
+
+    private void setupSound() {
+        touchSound.add(Gdx.audio.newSound(Gdx.files.internal("sounds/touch_1.wav")));
+        touchSound.add(Gdx.audio.newSound(Gdx.files.internal("sounds/touch_2.wav")));
+        touchSound.add(Gdx.audio.newSound(Gdx.files.internal("sounds/touch_3.wav")));
+    }
 
     // This is the rectangle pool used in collision detection
     // Good to avoid instantiation each frame
@@ -56,6 +63,7 @@ public class PlayerCharacterController extends Controller {
     public PlayerCharacterController(World world) {
         this.setWorld(world);
         this.playerCharacter = world.getPlayerCharacter();
+        setupSound();
     }
 
     // ** Key presses and touches **************** //
@@ -194,6 +202,9 @@ public class PlayerCharacterController extends Controller {
             if (playerCharacterRect.overlaps(block.getBounds())) {
                 if (playerCharacter.getVelocity().y < 0) {
                     grounded = true;
+                    if (playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+                        touchSound.random().play(1.0f);
+                    }
                 }
                 playerCharacter.getVelocity().y = 0;
                 this.getWorld().getCollisionRects().add(block.getBounds());
@@ -229,7 +240,7 @@ public class PlayerCharacterController extends Controller {
     private boolean processInput() {
         if (keys.get(Keys.JUMP)) {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
-                jumpSound.play(0.5f);
+                jumpSound.play(0.4f);
                 jumpingPressed = true;
                 jumpPressedTime = System.currentTimeMillis();
                 playerCharacter.setState(PlayerCharacter.State.JUMPING);
