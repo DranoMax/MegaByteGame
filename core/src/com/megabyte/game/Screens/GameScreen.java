@@ -6,10 +6,14 @@ import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.megabyte.game.Controller.KidController;
+import com.megabyte.game.Controller.Behavior.WanderBehavior;
+import com.megabyte.game.Controller.NPCController;
 import com.megabyte.game.Controller.PlayerCharacterController;
+import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.World;
 import com.megabyte.game.View.WorldRenderer;
+
+import java.util.ArrayList;
 
 
 public class GameScreen implements Screen, InputProcessor {
@@ -17,7 +21,7 @@ public class GameScreen implements Screen, InputProcessor {
     private World world;
     private WorldRenderer renderer;
     private PlayerCharacterController playerCharacterController;
-    private KidController kidController;
+    private ArrayList<Entity> enemies;
 
     private int width, height;
 
@@ -26,7 +30,11 @@ public class GameScreen implements Screen, InputProcessor {
         world = new World();
         renderer = new WorldRenderer(world, false);
         playerCharacterController = new PlayerCharacterController(world);
-        kidController = new KidController(world);
+        enemies = world.getEnemies();
+        // Update our enemies
+        for (Entity enemy : enemies) {
+            enemy.setNpcController(new NPCController(enemy, world, new WanderBehavior()));
+        }
         Gdx.input.setInputProcessor(this);
     }
 
@@ -36,7 +44,12 @@ public class GameScreen implements Screen, InputProcessor {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         playerCharacterController.update(delta);
-        kidController.update(delta);
+
+        // Update our enemies
+        for (Entity enemy : enemies) {
+            enemy.getNpcController().update(delta);
+        }
+
         renderer.render();
     }
 

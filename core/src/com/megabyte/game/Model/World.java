@@ -16,6 +16,7 @@ public class World {
     /** The collision boxes **/
     Array<Rectangle> collisionRects = new Array<Rectangle>();
 
+    /** Our devious enemies **/
     ArrayList<Entity> enemies = new ArrayList<Entity>();
 
     // Getters -----------
