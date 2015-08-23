@@ -11,7 +11,7 @@ import com.badlogic.gdx.math.Vector2;
 public class PlayerCharacter extends Entity {
 
 	private boolean longJump = false;
-	public static final float SIZE = 0.5f; // half a unit
+	public static final float SIZE = .75f; // half a unit
 
 	private static final float RUNNING_FRAME_DURATION = 0.06f;
 
@@ -42,29 +42,29 @@ public class PlayerCharacter extends Entity {
 
 	@Override
 	public void loadTextures() {
-		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/textures.pack"));
-		playerCharacterIdleLeft = atlas.findRegion("bob-01");
-		playerCharacterIdleRight = new TextureRegion(playerCharacterIdleLeft);
-		playerCharacterIdleRight.flip(true, false);
-		TextureRegion[] walkLeftFrames = new TextureRegion[5];
-		for (int i = 0; i < 5; i++) {
-			walkLeftFrames[i] = atlas.findRegion("bob-0" + (i + 2));
-		}
-		walkLeftAnimation = new Animation(RUNNING_FRAME_DURATION, walkLeftFrames);
-
-		TextureRegion[] walkRightFrames = new TextureRegion[5];
-
-		for (int i = 0; i < 5; i++) {
-			walkRightFrames[i] = new TextureRegion(walkLeftFrames[i]);
-			walkRightFrames[i].flip(true, false);
+		TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/kidAndCat.atlas"));
+		playerCharacterIdleRight = atlas.findRegion("cat-2");
+		playerCharacterIdleLeft = new TextureRegion(playerCharacterIdleRight);
+		playerCharacterIdleLeft.flip(true, false);
+		TextureRegion[] walkRightFrames = new TextureRegion[4];
+		for (int i = 0; i < 4; i++) {
+			walkRightFrames[i] = atlas.findRegion("cat-" + i);
 		}
 		walkRightAnimation = new Animation(RUNNING_FRAME_DURATION, walkRightFrames);
-		playerCharacterJumpLeft = atlas.findRegion("bob-up");
-		playerCharacterJumpRight = new TextureRegion(playerCharacterJumpLeft);
-		playerCharacterJumpRight.flip(true, false);
-		playerCharacterFallLeft = atlas.findRegion("bob-down");
-		playerCharacterFallRight = new TextureRegion(playerCharacterFallLeft);
-		playerCharacterFallRight.flip(true, false);
+
+		TextureRegion[] walkLeftFrames = new TextureRegion[4];
+
+		for (int i = 0; i < 4; i++) {
+			walkLeftFrames[i] = new TextureRegion(walkRightFrames[i]);
+			walkLeftFrames[i].flip(true, false);
+		}
+		walkLeftAnimation = new Animation(RUNNING_FRAME_DURATION, walkLeftFrames);
+		playerCharacterJumpRight = atlas.findRegion("cat-3");
+		playerCharacterJumpLeft = new TextureRegion(playerCharacterJumpRight);
+		playerCharacterJumpLeft.flip(true, false);
+		playerCharacterFallRight = atlas.findRegion("cat-1");
+		playerCharacterFallLeft = new TextureRegion(playerCharacterFallRight);
+		playerCharacterFallLeft.flip(true, false);
 	}
 
 	@Override
