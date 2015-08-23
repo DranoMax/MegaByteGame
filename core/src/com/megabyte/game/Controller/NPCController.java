@@ -1,6 +1,5 @@
 package com.megabyte.game.Controller;
 
-import com.badlogic.gdx.math.Vector2;
 import com.megabyte.game.Controller.Behavior.Behavior;
 import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.World;
@@ -15,12 +14,13 @@ public class NPCController extends Controller {
 
     public NPCController(Entity npc, World world, Behavior behavior) {
         super(npc, world, behavior);
-        npc.setVelocity(new Vector2(2, npc.getVelocity().y));
     }
 
     @Override
     public void update(float delta) {
         this.checkCollisionWithBlocks(delta);
+        this.getEntity().update(delta);
+
     }
 
 }

@@ -36,6 +36,11 @@ public abstract class Controller {
         this.world = world;
         this.behavior = behavior;
     }
+
+    public Entity getEntity() {
+        return entity;
+    }
+
     public boolean isGrounded() {
         return grounded;
     }

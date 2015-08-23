@@ -76,7 +76,10 @@ public class Level {
                     playerCharacter = new PlayerCharacter(new Vector2(i, height-1-x));
                 } else if (map[x][i] == 'm') {
                     System.out.println("adding mom");
-                    enemies.add(new Mom(new Vector2(i, height-1-x)));
+                    enemies.add(new Mom(new Vector2(i, height - 1 - x)));
+                } else if (map[x][i] == '@') {
+                    System.out.println("adding kid");
+                    enemies.add(new Kid(new Vector2(i, height-1-x)));
                 }
             }
         }
