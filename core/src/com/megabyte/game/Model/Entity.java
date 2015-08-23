@@ -8,10 +8,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.megabyte.game.Controller.NPCController;
 
+import java.util.Observable;
+
 /**
  * Created by ascroggins on 8/21/2015.
  */
-public abstract class Entity {
+public abstract class Entity extends Observable
+{
 
     private Vector2 position = new Vector2();
     private Vector2 acceleration = new Vector2();
@@ -109,6 +112,8 @@ public abstract class Entity {
         this.position = position;
         this.bounds.setX(position.x);
         this.bounds.setY(position.y);
+        setChanged();
+        notifyObservers();
     }
 
     public Vector2 getAcceleration() {
@@ -137,4 +142,6 @@ public abstract class Entity {
 //		bounds.y = position.y;
         stateTime += delta;
     }
+
+
 }
