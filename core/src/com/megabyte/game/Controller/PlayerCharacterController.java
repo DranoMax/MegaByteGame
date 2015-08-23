@@ -3,9 +3,11 @@ package com.megabyte.game.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Pool;
 import com.megabyte.game.Model.Block;
+import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.PlayerCharacter;
 import com.megabyte.game.Model.World;
 
@@ -29,6 +31,7 @@ public class PlayerCharacterController extends Controller {
     private long	jumpPressedTime;
     private boolean jumpingPressed;
     private boolean grounded = false;
+    private Vector2 attackPosition;
 
     // Jumping sound effect
     private Sound jumpSound = Gdx.audio.newSound(Gdx.files.internal("sounds/jump_sound.wav"));
@@ -99,6 +102,11 @@ public class PlayerCharacterController extends Controller {
 
     public void fireReleased() {
         keys.get(keys.put(Keys.FIRE, false));
+    }
+
+    public void attackPressed(int x, int y) {
+        System.out.println("attacking: "+x+","+y);
+        attackPosition = new Vector2(x, y);
     }
 
     /** The main update method **/
@@ -276,6 +284,21 @@ public class PlayerCharacterController extends Controller {
             }
             playerCharacter.getAcceleration().x = 0;
 
+        }
+        if (attackPosition != null) {
+            //set attack state
+
+            //check if enemy in area
+            for (Entity enemy : getWorld().getEnemies()) {
+                Rectangle enemyRect = rectPool.obtain();
+                System.out.println("enemy "+enemy.getClass() +":" +enemy.getBounds());
+                enemyRect.set(enemy.getBounds().x, enemy.getBounds().y, enemy.getBounds().width, enemy.getBounds().height);
+                boolean hitEnemy = enemyRect.overlaps(rectPool.obtain().set(attackPosition.x, attackPosition.y, 5,5));
+                if (hitEnemy) {
+                    System.out.println("hit");
+                }
+            }
+            attackPosition = null;
         }
         return false;
     }
