@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.megabyte.game.Model.Block;
 import com.megabyte.game.Model.Entity;
 import com.megabyte.game.Model.PlayerCharacter;
+import com.megabyte.game.Model.SpeechBubble;
 import com.megabyte.game.Model.World;
 
 public class WorldRenderer {
@@ -59,6 +60,7 @@ public class WorldRenderer {
         drawBlocks();
         drawPlayerCharacter();
         drawEnemies();
+        drawSpeechBubbles();
         spriteBatch.end();
         drawCollisionBlocks();
         if (debug)
@@ -78,6 +80,12 @@ public class WorldRenderer {
     private void drawEnemies() {
         for (Entity enemy : world.getEnemies()) {
             enemy.drawEntity(spriteBatch, cam, PLAYER_POSITION_IN_SCREEN, ppuX, ppuY);
+        }
+    }
+
+    private void drawSpeechBubbles() {
+        for (SpeechBubble bubble : world.getSpeechBubbles()) {
+            bubble.draw(spriteBatch, cam, PLAYER_POSITION_IN_SCREEN, ppuX, ppuY);
         }
     }
 
