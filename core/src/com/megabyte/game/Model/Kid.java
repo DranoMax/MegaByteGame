@@ -24,7 +24,7 @@ public class Kid extends Entity {
 
     @Override
     public void loadTextures() {
-        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/kidAndCat.atlas"));
+        TextureAtlas atlas = new TextureAtlas(Gdx.files.internal("images/textures/kidAndCat.pack"));
         entityIdleRight = atlas.findRegion("kid-0");
         entityIdleLeft = new TextureRegion(entityIdleRight);
         entityIdleLeft.flip(true, false);

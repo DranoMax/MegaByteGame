@@ -31,6 +31,8 @@ public abstract class Entity {
     /** Animations **/
     public Animation walkLeftAnimation;
     public Animation walkRightAnimation;
+    public Animation attackLeftAnimation;
+    public Animation attackRightAnimation;
 
     public enum State {
         IDLE, WALKING, JUMPING, DYING
@@ -40,6 +42,7 @@ public abstract class Entity {
     boolean facingLeft = true;
     float stateTime = 0;
     private static float SIZE;
+    private boolean isAttacking = false;
 
     public Entity (Vector2 position, float SIZE) {
         this.SIZE = SIZE;
@@ -136,5 +139,13 @@ public abstract class Entity {
 //		bounds.x = position.x;
 //		bounds.y = position.y;
         stateTime += delta;
+    }
+
+    public boolean isAttacking() {
+        return isAttacking;
+    }
+
+    public void setIsAttacking(boolean isAttacking) {
+        this.isAttacking = isAttacking;
     }
 }

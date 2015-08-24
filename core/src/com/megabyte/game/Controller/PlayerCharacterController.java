@@ -14,7 +14,7 @@ import java.util.Map;
 public class PlayerCharacterController extends Controller {
 
     enum Keys {
-        LEFT, RIGHT, JUMP, FIRE
+        LEFT, RIGHT, JUMP, ATTACK
     }
 
     private static final long LONG_JUMP_PRESS 	= 150l;
@@ -44,7 +44,7 @@ public class PlayerCharacterController extends Controller {
         keys.put(Keys.LEFT, false);
         keys.put(Keys.RIGHT, false);
         keys.put(Keys.JUMP, false);
-        keys.put(Keys.FIRE, false);
+        keys.put(Keys.ATTACK, false);
     };
 
     public PlayerCharacterController(World world) {
@@ -68,7 +68,7 @@ public class PlayerCharacterController extends Controller {
     }
 
     public void firePressed() {
-        keys.get(keys.put(Keys.FIRE, false));
+        keys.get(keys.put(Keys.ATTACK, false));
     }
 
     public void leftReleased() {
@@ -85,11 +85,12 @@ public class PlayerCharacterController extends Controller {
     }
 
     public void fireReleased() {
-        keys.get(keys.put(Keys.FIRE, false));
+        keys.get(keys.put(Keys.ATTACK, false));
     }
 
     public void attackPressed(Rectangle attackRectangle) {
         this.attackRectangle = attackRectangle;
+        this.playerCharacter.setIsAttacking(true);
     }
 
     /** The main update method **/
