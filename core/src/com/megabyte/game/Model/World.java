@@ -76,7 +76,12 @@ public class World {
         level = new Level();
         playerCharacter = level.getPlayerCharacter();
         enemies = level.getEnemies();
-        speechBubbleController.setSpeechBubble(playerCharacter, "I'm Alex. I'm a jerk.");
+
+        //testing speechBubbles
+        if (enemies.size() >= 2) {
+            speechBubbleController.setSpeechBubble(enemies.get(0), "I'm Alex. I'm a jerk.");
+            speechBubbleController.setSpeechBubble(enemies.get(1), "I'm Alex's mom.\nHe's a jerk.");
+        }
     }
 
     public Collection<SpeechBubble> getSpeechBubbles()

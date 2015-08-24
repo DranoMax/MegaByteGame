@@ -19,8 +19,7 @@ public class SpeechBubbleController implements Observer
         Entity entity = (Entity) o;
         SpeechBubble speechBubble = speechBubbleMap.get(entity.toString());
         if (speechBubble != null) {
-            System.out.println(entity.getPosition().x + "," + entity.getPosition().y);
-            speechBubble.setPosition(entity.getPosition().x, entity.getPosition().y);
+            speechBubble.setPosition(entity.getPosition().x + entity.getBounds().getWidth(), entity.getPosition().y + entity.getBounds().getHeight());
         }
     }
 

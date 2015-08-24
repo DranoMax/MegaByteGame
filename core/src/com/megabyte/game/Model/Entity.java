@@ -112,8 +112,6 @@ public abstract class Entity extends Observable
         this.position = position;
         this.bounds.setX(position.x);
         this.bounds.setY(position.y);
-        setChanged();
-        notifyObservers();
     }
 
     public Vector2 getAcceleration() {
@@ -141,6 +139,8 @@ public abstract class Entity extends Observable
 //		bounds.x = position.x;
 //		bounds.y = position.y;
         stateTime += delta;
+        setChanged();
+        notifyObservers();
     }
 
 
