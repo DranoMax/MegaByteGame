@@ -2,8 +2,10 @@ package com.megabyte.game.Model;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
+import com.megabyte.game.Controller.SpeechBubbleController;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class World {
@@ -18,6 +20,8 @@ public class World {
 
     /** Our devious enemies **/
     ArrayList<Entity> enemies = new ArrayList<Entity>();
+
+    SpeechBubbleController speechBubbleController = new SpeechBubbleController();
 
     // Getters -----------
 
@@ -72,5 +76,16 @@ public class World {
         level = new Level();
         playerCharacter = level.getPlayerCharacter();
         enemies = level.getEnemies();
+
+        //testing speechBubbles
+        if (enemies.size() >= 2) {
+            speechBubbleController.setSpeechBubble(enemies.get(0), "I'm Alex. I'm a jerk.");
+            speechBubbleController.setSpeechBubble(enemies.get(1), "I'm Alex's mom.\nHe's a jerk.");
+        }
+    }
+
+    public Collection<SpeechBubble> getSpeechBubbles()
+    {
+        return speechBubbleController.getSpeechBubbles();
     }
 }
