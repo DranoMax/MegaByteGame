@@ -3,10 +3,12 @@ package com.megabyte.game.Controller;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.utils.Array;
 import com.megabyte.game.Model.Entity;
+import com.megabyte.game.Model.GameWorld;
 import com.megabyte.game.Model.PlayerCharacter;
-import com.megabyte.game.Model.World;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,15 +19,9 @@ public class PlayerCharacterController extends Controller {
         LEFT, RIGHT, JUMP, ATTACK
     }
 
-    private static final long LONG_JUMP_PRESS 	= 150l;
-    private static final float ACCELERATION 	= 20f;
-    private static final float GRAVITY 			= -20f;
-    private static final float MAX_JUMP_SPEED	= 7f;
-    private static final float DAMP 			= 0.90f;
-    private static final float MAX_VEL 			= 4f;
+    private static final float MAX_VEL = 30f;
 
     private PlayerCharacter playerCharacter;
-    private long	jumpPressedTime;
     private boolean jumpingPressed;
     private Rectangle attackRectangle;
 
@@ -47,9 +43,9 @@ public class PlayerCharacterController extends Controller {
         keys.put(Keys.ATTACK, false);
     };
 
-    public PlayerCharacterController(World world) {
-        super(world.getPlayerCharacter(), world);
-        this.playerCharacter = world.getPlayerCharacter();
+    public PlayerCharacterController(GameWorld gameWorld) {
+        super(gameWorld.getPlayerCharacter(), gameWorld);
+        this.playerCharacter = gameWorld.getPlayerCharacter();
         setupSound();
     }
 
@@ -100,32 +96,12 @@ public class PlayerCharacterController extends Controller {
         processInput();
 
         // If playerCharacter is grounded then reset the state to IDLE
-        if (this.isGrounded() && playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+        if (playerCharacter.numFootContacts > 0 && playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
             playerCharacter.setState(PlayerCharacter.State.IDLE);
         }
 
-        // Setting initial vertical acceleration
-        playerCharacter.getAcceleration().y = GRAVITY;
-
-        // Convert acceleration to frame time
-        playerCharacter.getAcceleration().scl(delta);
-
-        // apply acceleration to change velocity
-        playerCharacter.getVelocity().add(playerCharacter.getAcceleration().x, playerCharacter.getAcceleration().y);
-
-        // checking collisions with the surrounding blocks depending on playerCharacter's velocity
-        checkCollisionWithBlocks(delta);
-
-        // apply damping to halt playerCharacter nicely
-        playerCharacter.getVelocity().x *= DAMP;
-
-        // ensure terminal velocity is not exceeded
-        if (playerCharacter.getVelocity().x > MAX_VEL) {
-            playerCharacter.getVelocity().x = MAX_VEL;
-        }
-        if (playerCharacter.getVelocity().x < -MAX_VEL) {
-            playerCharacter.getVelocity().x = -MAX_VEL;
-        }
+        // Make sure we don't move too fast
+        checkMaxVel();
 
         // simply updates the state time
         playerCharacter.update(delta);
@@ -134,22 +110,15 @@ public class PlayerCharacterController extends Controller {
 
     /** Change playerCharacter's state and parameters based on input controls **/
     private boolean processInput() {
+        Body body = playerCharacter.getBody();
+        float impulse = body.getMass() * 1;
+
         if (keys.get(Keys.JUMP)) {
-            if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+            if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING) && !jumpingPressed) {
                 jumpSound.play(0.4f);
                 jumpingPressed = true;
-                jumpPressedTime = System.currentTimeMillis();
                 playerCharacter.setState(PlayerCharacter.State.JUMPING);
-                playerCharacter.getVelocity().y = MAX_JUMP_SPEED;
-                this.setGrounded(false);
-            } else {
-                if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
-                    jumpingPressed = false;
-                } else {
-                    if (jumpingPressed) {
-                        playerCharacter.getVelocity().y = MAX_JUMP_SPEED;
-                    }
-                }
+                body.applyLinearImpulse(new Vector2(0, 100), body.getWorldCenter(), true);
             }
         }
         if (keys.get(Keys.LEFT)) {
@@ -158,14 +127,14 @@ public class PlayerCharacterController extends Controller {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
                 playerCharacter.setState(PlayerCharacter.State.WALKING);
             }
-            playerCharacter.getAcceleration().x = -ACCELERATION;
+            body.applyLinearImpulse(new Vector2(-impulse, 0), body.getWorldCenter(), true);
         } else if (keys.get(Keys.RIGHT)) {
             // left is pressed
             playerCharacter.setFacingLeft(false);
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
                 playerCharacter.setState(PlayerCharacter.State.WALKING);
             }
-            playerCharacter.getAcceleration().x = ACCELERATION;
+            body.applyLinearImpulse(new Vector2(impulse, 0), body.getWorldCenter(), true);
         } else {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
                 playerCharacter.setState(PlayerCharacter.State.IDLE);
@@ -179,7 +148,7 @@ public class PlayerCharacterController extends Controller {
             //set attack state
 
             //check if enemy in area
-            for (Entity enemy : getWorld().getEnemies()) {
+            for (Entity enemy : getGameWorld().getEnemies()) {
                 //TODO: use a rectangle pool
                 Rectangle enemyRect = new Rectangle(enemy.getBounds().x - playerCharacter.getPosition().x+5, enemy.getBounds().y, enemy.getBounds().width, enemy.getBounds().height);
                 boolean hitEnemy = enemyRect.overlaps(attackRectangle);
@@ -190,6 +159,21 @@ public class PlayerCharacterController extends Controller {
             attackRectangle = null;
         }
         return false;
+    }
+
+    /**
+     * Ensure we don't go faster than we're allowed!
+     */
+    private void checkMaxVel() {
+        Body body = playerCharacter.getBody();
+        float velY = body.getLinearVelocity().y;
+
+        if (body.getLinearVelocity().x > MAX_VEL) {
+            body.setLinearVelocity(MAX_VEL, velY);
+        }
+        else if (body.getLinearVelocity().x < -MAX_VEL) {
+            body.setLinearVelocity(-MAX_VEL, velY);
+        }
     }
 
 }

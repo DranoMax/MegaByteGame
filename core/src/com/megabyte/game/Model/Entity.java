@@ -6,6 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.Fixture;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
+import com.badlogic.gdx.physics.box2d.World;
 import com.megabyte.game.Controller.NPCController;
 
 import java.util.Observable;
@@ -36,6 +41,10 @@ public abstract class Entity extends Observable
     public Animation walkRightAnimation;
     public Animation attackLeftAnimation;
     public Animation attackRightAnimation;
+
+    /** Physics **/
+    private Body body;
+    public int numFootContacts = 0;
 
     public enum State {
         IDLE, WALKING, JUMPING, DYING
@@ -68,6 +77,38 @@ public abstract class Entity extends Observable
      * @param ppuY
      */
     public abstract void drawEntity(SpriteBatch spriteBatch, OrthographicCamera cam, float PLAYER_POSITION_IN_SCREEN, float ppuX, float ppuY);
+
+    /**
+     * Called in WorldRenderer during Create to create the Entity's physics body
+     * @param physicsWorld
+     */
+    public abstract void createPhysicsBody(World physicsWorld);
+
+    public void createPhysicsFoot(World physicsWorld) {
+        Vector2 pos = this.getBody().getPosition();
+        UserData userData = (UserData)this.getBody().getUserData();
+        float bodySize = userData.bodySize/2;
+
+        UserData footuserData = new UserData();
+        footuserData.id = 3;
+        footuserData.entity = this;
+
+        //shape definition for main fixture
+        PolygonShape polygonShape = new PolygonShape();
+
+        //fixture definition
+        FixtureDef myFixtureDef = new FixtureDef();
+        myFixtureDef.shape = polygonShape;
+        myFixtureDef.density = 1;
+
+        //add foot sensor fixture
+        polygonShape.setAsBox(bodySize, 0.3f, new Vector2(pos.x+1, 0), 0);
+        myFixtureDef.isSensor = true;
+        Fixture footSensorFixture = this.getBody().createFixture(myFixtureDef);
+        footSensorFixture.setUserData(footuserData);
+
+        polygonShape.dispose();
+    }
 
     public NPCController getNpcController() {
         return npcController;
@@ -135,6 +176,14 @@ public abstract class Entity extends Observable
 
     public void setState(State newState) {
         this.state = newState;
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
     }
 
     public void update(float delta) {

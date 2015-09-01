@@ -10,7 +10,7 @@ import com.megabyte.game.Controller.Behavior.FollowBehavior;
 import com.megabyte.game.Controller.NPCController;
 import com.megabyte.game.Controller.PlayerCharacterController;
 import com.megabyte.game.Model.Entity;
-import com.megabyte.game.Model.World;
+import com.megabyte.game.Model.GameWorld;
 import com.megabyte.game.View.WorldRenderer;
 
 import java.util.ArrayList;
@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class GameScreen implements Screen, InputProcessor {
 
-    private World world;
+    private GameWorld gameWorld;
     private WorldRenderer renderer;
     private PlayerCharacterController playerCharacterController;
     private ArrayList<Entity> enemies;
@@ -27,13 +27,13 @@ public class GameScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        world = new World();
-        renderer = new WorldRenderer(world, false);
-        playerCharacterController = new PlayerCharacterController(world);
-        enemies = world.getEnemies();
+        gameWorld = new GameWorld();
+        renderer = new WorldRenderer(gameWorld, false);
+        playerCharacterController = new PlayerCharacterController(gameWorld);
+        enemies = gameWorld.getEnemies();
         // Update our enemies
         for (Entity enemy : enemies) {
-            NPCController controller = new NPCController(enemy, world);
+            NPCController controller = new NPCController(enemy, gameWorld);
             enemy.setNpcController(controller);
             enemy.getNpcController().setBehavior(new FollowBehavior(controller));
         }
@@ -51,7 +51,6 @@ public class GameScreen implements Screen, InputProcessor {
         for (Entity enemy : enemies) {
             enemy.getNpcController().update(delta);
         }
-
         renderer.render();
     }
 

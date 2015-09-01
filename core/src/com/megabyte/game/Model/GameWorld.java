@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class World {
+public class GameWorld {
 
     /** Our player controlled hero **/
     PlayerCharacter playerCharacter;
@@ -68,7 +68,7 @@ public class World {
     }
 
     // --------------------
-    public World() {
+    public GameWorld() {
         createDemoWorld();
     }
 

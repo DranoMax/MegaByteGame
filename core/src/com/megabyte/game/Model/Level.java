@@ -19,7 +19,9 @@ public class Level {
     private PlayerCharacter playerCharacter;
 
     ArrayList<Entity> enemies = new ArrayList<Entity>();
+    ArrayList<Entity> entities = new ArrayList<Entity>();
 
+    public ArrayList<Entity> getEntities() { return entities; }
     public ArrayList<Entity> getEnemies() {
         return enemies;
     }
@@ -68,18 +70,27 @@ public class Level {
         width = map[0].length;
         blocks = new Block[width][height];
 
+        // libgdx inverts the y axis, so we have to account for that here
+        int fixedY = height-1;
+
         for (int i = 0; i < width; i++) {
             for (int x = 0; x < height; x++) {
                 if (map[x][i] == 'x') {
-                    blocks[i][height-1-x] = new Block(new Vector2(i, height-1-x));
+                    blocks[i][height-1-x] = new Block(new Vector2(i, fixedY-x));
+                    entities.add(blocks[i][height-1-x]);
                 } else if (map[x][i] == 's') {
-                    playerCharacter = new PlayerCharacter(new Vector2(i, height-1-x));
+                    playerCharacter = new PlayerCharacter(new Vector2(i, fixedY-x));
+                    entities.add(playerCharacter);
                 } else if (map[x][i] == 'm') {
+                    Mom mom = new Mom(new Vector2(i, fixedY-x));
                     System.out.println("adding mom");
-                    enemies.add(new Mom(new Vector2(i, height - 1 - x)));
+                    enemies.add(mom);
+                    entities.add(mom);
                 } else if (map[x][i] == '@') {
+                    Kid kid = new Kid(new Vector2(i, fixedY-x));
                     System.out.println("adding kid");
-                    enemies.add(new Kid(new Vector2(i, height-1-x)));
+                    enemies.add(kid);
+                    entities.add(kid);
                 }
             }
         }
