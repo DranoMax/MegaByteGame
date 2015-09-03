@@ -111,14 +111,14 @@ public class PlayerCharacterController extends Controller {
     /** Change playerCharacter's state and parameters based on input controls **/
     private boolean processInput() {
         Body body = playerCharacter.getBody();
-        float impulse = body.getMass() * 1;
+        float impulse = body.getMass() * .25f;
 
         if (keys.get(Keys.JUMP)) {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING) && !jumpingPressed) {
                 jumpSound.play(0.4f);
                 jumpingPressed = true;
                 playerCharacter.setState(PlayerCharacter.State.JUMPING);
-                body.applyLinearImpulse(new Vector2(0, 100), body.getWorldCenter(), true);
+                body.applyLinearImpulse(new Vector2(0, 1.5f), body.getWorldCenter(), true);
             }
         }
         if (keys.get(Keys.LEFT)) {

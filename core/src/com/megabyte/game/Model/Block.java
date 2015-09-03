@@ -14,7 +14,7 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Block extends Entity{
 
-    public static final float SIZE = 10f;
+    public static final float SIZE = 3f;
 
     public Block(Vector2 pos) {
         super(new Vector2(pos.x*(SIZE/2), pos.y*(SIZE/2)), SIZE);

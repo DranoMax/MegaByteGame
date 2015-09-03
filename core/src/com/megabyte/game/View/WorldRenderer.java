@@ -18,7 +18,6 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -60,7 +59,7 @@ public class WorldRenderer extends ApplicationAdapter {
     Box2DDebugRenderer box2dDebugRenderer;
     Matrix4 debugMatrix;
     TextureRegion textureRegion;
-    Body groundBody;
+
     /** our boxes **/
     private ArrayList<Body> boxes = new ArrayList<Body>();
     public void setSize (int w, int h) {
@@ -79,8 +78,8 @@ public class WorldRenderer extends ApplicationAdapter {
         this.gameWorld = gameWorld;
         float w = Gdx.graphics.getWidth();
         float h = Gdx.graphics.getHeight();
-        cam = new OrthographicCamera(48, 32);
-        cam.position.set(0, 16, 0);
+        cam = new OrthographicCamera(12,8);
+        cam.position.set(0, 4, 0);
         this.cam.update();
         this.debug = debug;
         spriteBatch = new SpriteBatch();
@@ -117,8 +116,6 @@ public class WorldRenderer extends ApplicationAdapter {
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
 
-        Fixture fixture = body.createFixture(fixtureDef);
-
         // Shape is the only disposable of the lot, so get rid of it
         shape.dispose();
 
@@ -148,32 +145,7 @@ public class WorldRenderer extends ApplicationAdapter {
         PolygonShape shape = new PolygonShape();
         shape.set(vertices);
 
-        // next we create a static ground platform. This platform
-        // is not moveable and will not react to any influences from
-        // outside. It will however influence other bodies. First we
-        // create a PolygonShape that holds the form of the platform.
-        // it will be 100 meters wide and 2 meters high, centered
-        // around the origin
-        PolygonShape groundPoly = new PolygonShape();
-        groundPoly.setAsBox(50, 1);
-
-        // next we create the body for the ground platform. It's
-        // simply a static body.
-        BodyDef groundBodyDef = new BodyDef();
-        groundBodyDef.type = BodyDef.BodyType.StaticBody;
-        groundBody = physicsWorld.createBody(groundBodyDef);
-
-        // finally we add a fixture to the body using the polygon
-        // defined above. Note that we have to dispose PolygonShapes
-        // and CircleShapes once they are no longer used. This is the
-        // only time you have to care explicitly for memory management.
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = groundPoly;
-        fixtureDef.filter.groupIndex = 0;
-        groundBody.createFixture(fixtureDef);
-        groundPoly.dispose();
-
-        createBoxes();
+      //  createBoxes();
     }
 
     private void createBoxes () {
@@ -214,7 +186,6 @@ public class WorldRenderer extends ApplicationAdapter {
         long start = TimeUtils.nanoTime();
         physicsWorld.step(Gdx.graphics.getDeltaTime(), 8, 3);
         float updateTime = (TimeUtils.nanoTime() - start) / 1000000000.0f;
-        renderBox(groundBody, 50, 1);
 
         // next we render each box via the SpriteBatch.
         // for this we have to set the projection matrix of the
@@ -261,10 +232,8 @@ public class WorldRenderer extends ApplicationAdapter {
         }
         debugRenderer.end();
 
-
-
         // We want the camera to follow the player, so we set it to the Player's position.
-        cam.position.x = gameWorld.getPlayerCharacter().getBody().getPosition().x;
+        cam.position.x = gameWorld.getPlayerCharacter().getBody().getPosition().x+PLAYER_POSITION_IN_SCREEN;
         cam.update();
         spriteBatch.begin();
         drawBlocks();

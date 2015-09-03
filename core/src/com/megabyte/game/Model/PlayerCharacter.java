@@ -15,7 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 public class PlayerCharacter extends Entity {
 
     private boolean longJump = false;
-    public static final float SIZE = 5; // half a unit
+    public static final float SIZE = 1; // half a unit
 
     private static final float RUNNING_FRAME_DURATION = 0.06f;
 
@@ -87,7 +87,7 @@ public class PlayerCharacter extends Entity {
                 entityFrame = this.isFacingLeft() ? entityFallLeft : entityFallRight;
             }
         }
-        spriteBatch.draw(entityFrame, position.x-SIZE/2, position.y-SIZE/4, SIZE, SIZE);
+        spriteBatch.draw(entityFrame, position.x+2.5f, position.y+1.5f, SIZE, SIZE);
         if (this.isAttacking()) {
             drawAttack(spriteBatch, cam, PLAYER_POSITION_IN_SCREEN, ppuX, ppuY);
         }
@@ -124,7 +124,7 @@ public class PlayerCharacter extends Entity {
         fixtureDef.shape = circleShape;
         fixtureDef.friction = 5f;
         fixtureDef.filter.groupIndex = 0;
-        fixtureDef.density = 3;
+        fixtureDef.density = 1;
         this.getBody().createFixture(fixtureDef);
 
         UserData user = new UserData();
