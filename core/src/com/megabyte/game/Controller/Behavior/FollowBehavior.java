@@ -29,7 +29,7 @@ public class FollowBehavior extends Behavior {
 
     @Override
     public void execute() {
-        PlayerCharacter pc = this.getController().getWorld().getPlayerCharacter();
+        PlayerCharacter pc = this.getController().getGameWorld().getPlayerCharacter();
         float pcSize = pc.getSIZE();
 
         if (entity.getPosition().x < pc.getPosition().x-pcSize/2) {
@@ -56,7 +56,6 @@ public class FollowBehavior extends Behavior {
             jumpPressedTime = System.currentTimeMillis();
             entity.setState(PlayerCharacter.State.JUMPING);
             entity.getVelocity().y = .05f;
-            this.getController().setGrounded(false);
         } else {
             if (jumpingPressed && ((System.currentTimeMillis() - jumpPressedTime) >= LONG_JUMP_PRESS)) {
                 jumpingPressed = false;

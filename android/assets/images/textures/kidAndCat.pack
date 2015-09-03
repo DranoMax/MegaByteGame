@@ -31,9 +31,44 @@ kid-1
   orig: 414, 468
   offset: 0, 0
   index: -1
+tentacle-attack-0
+  rotate: false
+  xy: 959, 873
+  size: 53, 66
+  orig: 53, 66
+  offset: 0, 0
+  index: -1
+tentacle-attack-1
+  rotate: false
+  xy: 1, 77
+  size: 53, 66
+  orig: 53, 66
+  offset: 0, 0
+  index: -1
+tentacle-attack-2
+  rotate: false
+  xy: 959, 805
+  size: 53, 66
+  orig: 53, 66
+  offset: 0, 0
+  index: -1
+tentacle-attack-3
+  rotate: false
+  xy: 1, 9
+  size: 53, 66
+  orig: 53, 66
+  offset: 0, 0
+  index: -1
+tentacle-attack-4
+  rotate: false
+  xy: 56, 77
+  size: 53, 66
+  orig: 53, 66
+  offset: 0, 0
+  index: -1
 block
   rotate: false
-  xy: 959, 891
+  xy: 959, 755
   size: 48, 48
   orig: 48, 48
   offset: 0, 0
