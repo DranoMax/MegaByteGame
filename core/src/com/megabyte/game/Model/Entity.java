@@ -100,7 +100,6 @@ public abstract class Entity extends Observable
         FixtureDef myFixtureDef = new FixtureDef();
         myFixtureDef.shape = polygonShape;
         myFixtureDef.density = 1;
-System.out.println(userData.bodySize);
         //add foot sensor fixture
         polygonShape.setAsBox(bodySize, 0.1f, new Vector2(pos.x+3, 1.75f), 0);
         myFixtureDef.isSensor = true;

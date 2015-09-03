@@ -19,7 +19,7 @@ public class PlayerCharacterController extends Controller {
         LEFT, RIGHT, JUMP, ATTACK
     }
 
-    private static final float MAX_VEL = 30f;
+    private static final float MAX_VEL = 5f;
 
     private PlayerCharacter playerCharacter;
     private boolean jumpingPressed;
@@ -97,6 +97,7 @@ public class PlayerCharacterController extends Controller {
 
         // If playerCharacter is grounded then reset the state to IDLE
         if (playerCharacter.numFootContacts > 0 && playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
+            jumpingPressed = false;
             playerCharacter.setState(PlayerCharacter.State.IDLE);
         }
 
@@ -111,14 +112,14 @@ public class PlayerCharacterController extends Controller {
     /** Change playerCharacter's state and parameters based on input controls **/
     private boolean processInput() {
         Body body = playerCharacter.getBody();
-        float impulse = body.getMass() * .25f;
+        float impulse = body.getMass() * .4f;
 
         if (keys.get(Keys.JUMP)) {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING) && !jumpingPressed) {
                 jumpSound.play(0.4f);
                 jumpingPressed = true;
                 playerCharacter.setState(PlayerCharacter.State.JUMPING);
-                body.applyLinearImpulse(new Vector2(0, 1.5f), body.getWorldCenter(), true);
+                body.applyLinearImpulse(new Vector2(0, .3f), body.getWorldCenter(), true);
             }
         }
         if (keys.get(Keys.LEFT)) {
@@ -127,14 +128,14 @@ public class PlayerCharacterController extends Controller {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
                 playerCharacter.setState(PlayerCharacter.State.WALKING);
             }
-            body.applyLinearImpulse(new Vector2(-impulse, 0), body.getWorldCenter(), true);
+            applyHorizontalImpulse(body, -impulse);
         } else if (keys.get(Keys.RIGHT)) {
             // left is pressed
             playerCharacter.setFacingLeft(false);
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
                 playerCharacter.setState(PlayerCharacter.State.WALKING);
             }
-            body.applyLinearImpulse(new Vector2(impulse, 0), body.getWorldCenter(), true);
+            applyHorizontalImpulse(body, impulse);
         } else {
             if (!playerCharacter.getState().equals(PlayerCharacter.State.JUMPING)) {
                 playerCharacter.setState(PlayerCharacter.State.IDLE);
@@ -159,6 +160,10 @@ public class PlayerCharacterController extends Controller {
             attackRectangle = null;
         }
         return false;
+    }
+
+    private void applyHorizontalImpulse(Body body, float impulse) {
+        body.applyLinearImpulse(new Vector2(impulse, 0), body.getWorldCenter(), true);
     }
 
     /**

@@ -21,8 +21,6 @@ public class MyContactListener implements ContactListener {
                 fixtureUserData.entity.numFootContacts++;
             }
         //check if fixture B was the foot sensor
-
-   //     System.out.println(contact.getFixtureB().getBody().getUserData());
         fixtureUserData = (UserData)contact.getFixtureB().getUserData();
         if (fixtureUserData != null && fixtureUserData.id == 3) {
             if (fixtureUserData.entity != null) {
