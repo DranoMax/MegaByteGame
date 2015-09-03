@@ -14,22 +14,13 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class PlayerCharacter extends Entity {
 
-    private boolean longJump = false;
     public static final float SIZE = 1; // half a unit
-
     private static final float RUNNING_FRAME_DURATION = 0.06f;
 
     public PlayerCharacter(Vector2 position) {
         super(position, SIZE);
     }
 
-    public boolean isLongJump() {
-        return longJump;
-    }
-
-    public void setLongJump(boolean longJump) {
-        this.longJump = longJump;
-    }
 
     @Override
     public void loadTextures() {
@@ -81,7 +72,7 @@ public class PlayerCharacter extends Entity {
         if(this.getState().equals(Entity.State.WALKING)) {
             entityFrame = this.isFacingLeft() ? walkLeftAnimation.getKeyFrame(this.getStateTime(), true) : walkRightAnimation.getKeyFrame(this.getStateTime(), true);
         } else if (this.getState().equals(Entity.State.JUMPING)) {
-            if (this.getVelocity().y > 0) {
+            if (this.getBody().getLinearVelocity().y > 0) {
                 entityFrame = this.isFacingLeft() ? entityJumpLeft : entityJumpRight;
             } else {
                 entityFrame = this.isFacingLeft() ? entityFallLeft : entityFallRight;
